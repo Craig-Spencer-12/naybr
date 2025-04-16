@@ -1,0 +1,22 @@
+{
+    "family": "golang-api-task",
+    "executionRoleArn": "arn:aws:iam::510151261560:role/GolangExec",
+    "networkMode": "awsvpc",
+    "requiresCompatibilities": ["FARGATE"],
+    "cpu": "256",
+    "memory": "512",
+    "containerDefinitions": [
+      {
+        "name": "golang-api",
+        "image": "510151261560.dkr.ecr.us-east-1.amazonaws.com/golang-api:latest",
+        "portMappings": [
+          {
+            "containerPort": 8080,
+            "protocol": "tcp"
+          }
+        ],
+        "essential": true
+      }
+    ]
+  }
+  
