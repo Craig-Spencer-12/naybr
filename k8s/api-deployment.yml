@@ -14,8 +14,7 @@ spec:
     spec:
       containers:
         - name: api
-          image: golang-api:latest
-          imagePullPolicy: Never
+          image: craigspencer12/golang-api:latest
           ports:
             - containerPort: 8080
           env:

@@ -1,4 +1,5 @@
 compose:
+# eval $(minikube docker-env -u)
 	docker compose up --build
 
 run:
@@ -37,29 +38,12 @@ publish:
 # aws ecs describe-tasks --cluster golang-cluster --tasks <task-id> --region <your-region>
 
 
-
-
-
-
-
-
 # psql -U user -d mydb
 # \dt
 # SELECT * FROM books;
 
 # curl localhost:8080/books --include --header "Content-Type: application/json" -d @exampleBook.json --request "POST"
 
-kube:
-	minikube delete
-	minikube start
 
-	eval $(minikube docker-env)
-	docker build -t golang-api ./golang-api
-
-	kubectl apply -f k8s/postgres-pv.yml
-	kubectl apply -f k8s/postgres-deployment.yml
-	kubectl apply -f k8s/postgres-service.yml
-	kubectl apply -f k8s/api-deployment.yml
-	kubectl apply -f k8s/api-service.yml
 
 
