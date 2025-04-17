@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: golang-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: golang-api
+  template:
+    metadata:
+      labels:
+        app: golang-api
+    spec:
+      containers:
+        - name: api
+          image: golang-api:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8080
+          env:
+            - name: DB_HOST
+              value: "postgres"
+            - name: DB_PORT
+              value: "5432"
+            - name: DB_USER
+              value: "user"
+            - name: DB_PASSWORD
+              value: "password"
+            - name: DB_NAME
+              value: "mydb"

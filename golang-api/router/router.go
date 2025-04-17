@@ -1,13 +1,15 @@
-package main
+package router
 
 import (
+	"example/golang-api/database"
+	"example/golang-api/models"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
-func getAllBooks(c *gin.Context) {
-	books, err := getAllBooksQuery()
+func GetAllBooks(c *gin.Context) {
+	books, err := database.GetAllBooksQuery()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get all books"})
 	}
@@ -15,9 +17,9 @@ func getAllBooks(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, books)
 }
 
-func getBookById(c *gin.Context) {
+func GetBookById(c *gin.Context) {
 	id := c.Param("id")
-	book, err := getBookQuery(id)
+	book, err := database.GetBookQuery(id)
 
 	if err != nil {
 		c.IndentedJSON(http.StatusNotFound, gin.H{"message": err.Error()})
@@ -27,21 +29,21 @@ func getBookById(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, book)
 }
 
-func createBook(c *gin.Context) {
-	var newBook book
+func CreateBook(c *gin.Context) {
+	var newBook models.Book
 
 	if err := c.BindJSON(&newBook); err != nil {
 		return
 	}
 
-	if err := createBookQuery(newBook); err != nil {
+	if err := database.CreateBookQuery(newBook); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create book"})
 	}
 
 	c.IndentedJSON(http.StatusCreated, newBook)
 }
 
-func checkoutBook(c *gin.Context) {
+func CheckoutBook(c *gin.Context) {
 	id, ok := c.GetQuery("id")
 
 	if !ok {
@@ -49,18 +51,18 @@ func checkoutBook(c *gin.Context) {
 		return
 	}
 
-	err := changeBookQuantityQuery(id, -1)
+	err := database.ChangeBookQuantityQuery(id, -1)
 
 	if err != nil {
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 	}
 
-	book, _ := getBookQuery(id)
+	book, _ := database.GetBookQuery(id)
 	c.IndentedJSON(http.StatusOK, book)
 }
 
-func returnBook(c *gin.Context) {
+func ReturnBook(c *gin.Context) {
 	id, ok := c.GetQuery("id")
 
 	if !ok {
@@ -68,13 +70,13 @@ func returnBook(c *gin.Context) {
 		return
 	}
 
-	err := changeBookQuantityQuery(id, 1)
+	err := database.ChangeBookQuantityQuery(id, 1)
 
 	if err != nil {
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 	}
 
-	book, _ := getBookQuery(id)
+	book, _ := database.GetBookQuery(id)
 	c.IndentedJSON(http.StatusOK, book)
 }

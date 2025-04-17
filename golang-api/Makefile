@@ -1,18 +1,21 @@
+compose:
+	docker compose up --build
+
 run:
-	docker run --rm -it -p 8080:8080/tcp golang-api2:latest
+	docker run --rm -it -p 8080:8080/tcp golang-api:latest
 
 build: 
-	docker build -t golang-api2 .
+	docker build -t golang-api .
 
 shell:
-	docker run --rm -it -p 8080:8080/tcp golang-api2:latest sh
+	docker run --rm -it -p 8080:8080/tcp golang-api:latest sh
 
 get:
 	curl localhost:8080/books
 
 publish:
 	aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 510151261560.dkr.ecr.us-east-1.amazonaws.com
-	docker tag golang-api2:latest 510151261560.dkr.ecr.us-east-1.amazonaws.com/golang-api:latest
+	docker tag golang-api:latest 510151261560.dkr.ecr.us-east-1.amazonaws.com/golang-api:latest
 	docker push 510151261560.dkr.ecr.us-east-1.amazonaws.com/golang-api:latest
 
 # aws ecs create-cluster --cluster-name golang-cluster --region us-east-1
@@ -45,3 +48,18 @@ publish:
 # SELECT * FROM books;
 
 # curl localhost:8080/books --include --header "Content-Type: application/json" -d @exampleBook.json --request "POST"
+
+kube:
+	minikube delete
+	minikube start
+
+	eval $(minikube docker-env)
+	docker build -t golang-api ./golang-api
+
+	kubectl apply -f k8s/postgres-pv.yml
+	kubectl apply -f k8s/postgres-deployment.yml
+	kubectl apply -f k8s/postgres-service.yml
+	kubectl apply -f k8s/api-deployment.yml
+	kubectl apply -f k8s/api-service.yml
+
+

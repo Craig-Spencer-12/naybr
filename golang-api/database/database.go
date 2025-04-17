@@ -1,8 +1,9 @@
-package main
+package database
 
 import (
 	"database/sql"
 	"errors"
+	"example/golang-api/models"
 	"fmt"
 	"log"
 	"os"
@@ -10,7 +11,7 @@ import (
 
 var db *sql.DB
 
-func initDatabase() {
+func InitDatabase() {
 
 	dbHost := os.Getenv("DB_HOST")
 	dbPort := os.Getenv("DB_PORT")
@@ -48,7 +49,7 @@ CREATE TABLE IF NOT EXISTS books (
 	}
 }
 
-func createBookQuery(newBook book) error {
+func CreateBookQuery(newBook models.Book) error {
 	query := `INSERT INTO books (id, title, author, quantity) VALUES ($1, $2, $3, $4) RETURNING id`
 	err := db.QueryRow(query, newBook.ID, newBook.Title, newBook.Author, newBook.Quantity).Scan(&newBook.ID)
 	if err != nil {
@@ -59,9 +60,9 @@ func createBookQuery(newBook book) error {
 	return nil
 }
 
-func getBookQuery(id string) (book, error) {
+func GetBookQuery(id string) (models.Book, error) {
 
-	var b book
+	var b models.Book
 	query := `SELECT id, title, author, quantity FROM books WHERE id = $1`
 	err := db.QueryRow(query, id).Scan(&b.ID, &b.Title, &b.Author, &b.Quantity)
 
@@ -72,7 +73,7 @@ func getBookQuery(id string) (book, error) {
 	return b, nil
 }
 
-func getAllBooksQuery() ([]book, error) {
+func GetAllBooksQuery() ([]models.Book, error) {
 	query := `SELECT id, title, author, quantity FROM books`
 	rows, err := db.Query(query)
 	if err != nil {
@@ -81,9 +82,9 @@ func getAllBooksQuery() ([]book, error) {
 	}
 	defer rows.Close()
 
-	var books []book
+	var books []models.Book
 	for rows.Next() {
-		var b book
+		var b models.Book
 		if err := rows.Scan(&b.ID, &b.Title, &b.Author, &b.Quantity); err != nil {
 			log.Println("Error scanning book row:", err)
 			return nil, err
@@ -99,8 +100,8 @@ func getAllBooksQuery() ([]book, error) {
 	return books, nil
 }
 
-func changeBookQuantityQuery(id string, n int) error {
-	book, err := getBookQuery(id)
+func ChangeBookQuantityQuery(id string, n int) error {
+	book, err := GetBookQuery(id)
 	if err != nil {
 		log.Println("Database query error:", err)
 		return err
