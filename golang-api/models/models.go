@@ -7,6 +7,11 @@ type Book struct {
 	Quantity int    `json:"quantity"`
 }
 
+type Image struct {
+	ActivityName string `json:"activityName"`
+	URL          string `json:"url"`
+}
+
 var ExampleBooks = []Book{
 	{ID: "4", Title: "In Search of Lost Time", Author: "Marcel Proust", Quantity: 2},
 	{ID: "5", Title: "The Great Gatsby", Author: "F. Scott Fitzgerald", Quantity: 5},

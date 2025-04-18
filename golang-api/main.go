@@ -5,11 +5,14 @@ import (
 	"example/golang-api/models"
 	"example/golang-api/router"
 
-	"github.com/gin-gonic/gin"
 	_ "github.com/lib/pq"
 )
 
 func main() {
+
+	database.InitMinIO()
+
+	// database.UploadImageQuery("test", "example.png", "./assets/example.png", "image/png")
 
 	database.InitDatabase()
 
@@ -17,12 +20,5 @@ func main() {
 		database.CreateBookQuery(book)
 	}
 
-	engine := gin.Default()
-	engine.GET("/books", router.GetAllBooks)
-	engine.GET("/books/:id", router.GetBookById)
-	engine.POST("/books", router.CreateBook)
-	engine.PATCH("/checkout", router.CheckoutBook)
-	engine.PATCH("/return", router.ReturnBook)
-
-	engine.Run(":8080")
+	router.RunRouter()
 }

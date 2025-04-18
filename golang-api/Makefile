@@ -44,6 +44,8 @@ publish:
 
 # curl localhost:8080/books --include --header "Content-Type: application/json" -d @exampleBook.json --request "POST"
 
+# curl -X POST -F "image=@/home/craig/Desktop/3.png" http://localhost:8080/image
+
 
 
 
