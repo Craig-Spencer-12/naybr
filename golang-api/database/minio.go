@@ -46,3 +46,12 @@ func UploadImageQuery(bucket string, name string, path string) error {
 	log.Printf("Successfully uploaded %s", name)
 	return nil
 }
+
+func GetImageQuery(bucket string, name string) (*minio.Object, error) {
+	object, err := minioClient.GetObject(context.Background(), bucket, name, minio.GetObjectOptions{})
+	if err != nil {
+		return nil, err
+	}
+
+	return object, nil
+}

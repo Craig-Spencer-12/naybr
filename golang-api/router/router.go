@@ -12,6 +12,7 @@ func RunRouter() {
 	engine.PATCH("/return", ReturnBook)
 
 	engine.POST("/image", UploadImage)
+	engine.GET("/image/:filename", GetImage)
 
 	engine.Run(":8080")
 }
