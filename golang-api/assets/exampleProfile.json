@@ -1,0 +1,10 @@
+{
+    "firstName" : "Zach",
+    "lastName" : "Radu",
+    "phoneNumber" : "111-222-3333",
+    "email" : "zach.radu@gmail.com",
+    "password" : "P@ssw0rd",
+    "dateOfBirth" : "12/14/1999",
+    "gender" : "M",
+    "borough" : "Brooklyn"
+}

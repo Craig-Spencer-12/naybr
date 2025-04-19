@@ -42,7 +42,8 @@ publish:
 # \dt
 # SELECT * FROM books;
 
-# curl localhost:8080/books --include --header "Content-Type: application/json" -d @exampleBook.json --request "POST"
+# curl localhost:8080/users --include --header "Content-Type: application/json" -d @exampleProfile.json --request "POST"
+# curl localhost:8080/users/:name=Zach
 
 # curl -X POST -F "image=@/home/craig/Desktop/3.png" http://localhost:8080/image
 

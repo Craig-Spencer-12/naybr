@@ -7,13 +7,22 @@ type Book struct {
 	Quantity int    `json:"quantity"`
 }
 
+type User struct {
+	FirstName   string `json:"firstName"`
+	LastName    string `json:"lastName"`
+	PhoneNumber string `json:"phoneNumber"`
+	Email       string `json:"email"`
+	Password    string `json:"password"`
+	DOB         string `json:"dateOfBirth"`
+	Gender      string `json:"gender"`
+	Borough     string `json:"borough"`
+
+	ID              string `json:"id"`
+	ProfilePhotoURL string `json:"profilePhotoURL"`
+	BIO             string `json:"bio"`
+}
+
 type Image struct {
 	ActivityName string `json:"activityName"`
 	URL          string `json:"url"`
-}
-
-var ExampleBooks = []Book{
-	{ID: "4", Title: "In Search of Lost Time", Author: "Marcel Proust", Quantity: 2},
-	{ID: "5", Title: "The Great Gatsby", Author: "F. Scott Fitzgerald", Quantity: 5},
-	{ID: "6", Title: "War and Peace", Author: "Leo Tolstoy", Quantity: 6},
 }
