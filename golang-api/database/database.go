@@ -2,6 +2,7 @@ package database
 
 import (
 	"database/sql"
+	"example/golang-api/helpers"
 	"example/golang-api/models"
 	"fmt"
 	"log"
@@ -99,9 +100,15 @@ func GetUserQuery(name string) (models.User, error) {
 func GetViewableProfileQuery(id string) (models.ViewableProfile, error) {
 
 	var profile models.ViewableProfile
-	query := `SELECT first_name, gender, borough FROM users WHERE id = $1`
-	err := db.QueryRow(query, id).Scan(&profile.FirstName, &profile.Gender, &profile.Borough)
+	var dob string
+	query := `SELECT first_name, date_of_birth, gender, borough FROM users WHERE id = $1`
+	err := db.QueryRow(query, id).Scan(&profile.FirstName, &dob, &profile.Gender, &profile.Borough)
 
+	if err != nil {
+		return profile, err
+	}
+
+	profile.Age, err = helpers.CalculateAge(dob)
 	if err != nil {
 		return profile, err
 	}

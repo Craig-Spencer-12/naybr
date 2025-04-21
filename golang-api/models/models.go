@@ -25,6 +25,7 @@ type Activity struct {
 
 type ViewableProfile struct {
 	FirstName  string             `json:"firstName"`
+	Age        int                `json:"age"`
 	Gender     string             `json:"gender"`
 	Borough    string             `json:"borough"`
 	Activities []ViewableActivity `json:"activities"`
