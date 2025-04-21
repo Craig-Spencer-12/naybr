@@ -42,7 +42,7 @@ export default function TestScreen() {
       <ThemedView style={styles.titleContainer}>
         <ThemedText type="title">{profile?.firstName}</ThemedText>
       </ThemedView>
-      <ProfileInfoBar age={25} gender="Male" borough="Brooklyn" />
+      <ProfileInfoBar age={profile?.age!} gender={profile?.gender!} borough={profile?.borough!} />
       <ThemedText>Hey my name's Zach! I'm just a little guy here to make some friends!</ThemedText>
 
       <View>
