@@ -8,6 +8,9 @@ func RunRouter() {
 	// engine.GET("/users", GetAllUsers)
 	engine.GET("/users/:name", GetUserByName)
 	engine.POST("/user", CreateUser)
+	engine.GET("/profile/:id", GetViewableProfile)
+
+	engine.POST("/activities", CreateActivity)
 
 	// engine.PATCH("/checkout", CheckoutBook)
 	// engine.PATCH("/return", ReturnBook)

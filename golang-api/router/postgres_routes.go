@@ -38,11 +38,39 @@ func CreateUser(c *gin.Context) {
 	}
 
 	if err := database.CreateUserQuery(newUser); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create book"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create user"})
 		return
 	}
 
 	c.IndentedJSON(http.StatusCreated, newUser)
+}
+
+func GetViewableProfile(c *gin.Context) {
+	id := c.Param("id")
+	profile, err := database.GetViewableProfileQuery(id)
+
+	if err != nil {
+		c.IndentedJSON(http.StatusNotFound, gin.H{"message": err.Error()})
+		return
+	}
+
+	c.IndentedJSON(http.StatusOK, profile)
+}
+
+func CreateActivity(c *gin.Context) {
+	var newActivity models.Activity
+
+	if err := c.BindJSON(&newActivity); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"Message": "Failed to bind json to object", "Error": err})
+		return
+	}
+
+	if err := database.CreateActivityQuery(newActivity); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"Message": "Failed to create activity", "Error": err})
+		return
+	}
+
+	c.IndentedJSON(http.StatusCreated, newActivity)
 }
 
 // func CheckoutBook(c *gin.Context) {

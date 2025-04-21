@@ -5,7 +5,6 @@ import (
 	"log"
 	"os"
 	"strings"
-	"time"
 
 	"github.com/minio/minio-go/v7"
 	"github.com/minio/minio-go/v7/pkg/credentials"
@@ -19,8 +18,8 @@ func InitMinIO() {
 	accessKey := os.Getenv("S3_ACCESS_KEY")
 	secretKey := os.Getenv("S3_SECRET_KEY")
 
-	log.Println("Sleeping for 5 seconds to let MinIO wake up...")
-	time.Sleep(5 * time.Second)
+	// log.Println("Sleeping for 5 seconds to let MinIO wake up...")
+	// time.Sleep(5 * time.Second)
 	// database.WaitForService("MinIO", "minio")
 
 	var err error

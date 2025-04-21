@@ -32,7 +32,7 @@ func InitDatabase() {
 	}
 
 	createTableQuery := `CREATE TABLE IF NOT EXISTS users (
-		id SERIAL PRIMARY KEY,
+		id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
 		phone_number VARCHAR(15) UNIQUE NOT NULL,
 		email VARCHAR(100) UNIQUE NOT NULL,
 		password VARCHAR(255) NOT NULL,
@@ -54,27 +54,27 @@ func InitDatabase() {
 		log.Printf("Table created or already exists")
 	}
 
-	// 	createTableQuery = `CREATE TABLE IF NOT EXISTS photos (
-	//     id SERIAL PRIMARY KEY,
-	//     user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
-	//     photo_url VARCHAR(255) NOT NULL,
-	//     is_profile BOOLEAN DEFAULT FALSE,
-	//     order INTEGER DEFAULT 0,
-	//     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-	//     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-	// );`
-	// 	_, err = db.Exec(createTableQuery)
-	// 	if err != nil {
-	// 		log.Fatalf("Failed to create table: %v", err)
-	// 	} else {
-	// 		log.Printf("Table created or already exists")
-	// 	}
+	createTableQuery = `CREATE TABLE IF NOT EXISTS activities (
+	    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+	    user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+		title VARCHAR(50) NOT NULL,
+	    photo_url VARCHAR(255) NOT NULL,
+	    image_order INTEGER DEFAULT 0,
+	    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+	);`
+	_, err = db.Exec(createTableQuery)
+	if err != nil {
+		log.Fatalf("Failed to create table: %v", err)
+	} else {
+		log.Printf("Table created or already exists")
+	}
 
 }
 
-func CreateUserQuery(newUser models.User) error {
+func CreateUserQuery(user models.User) error {
 	query := `INSERT INTO users (first_name, last_name, phone_number, email, password, date_of_birth, gender, borough) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id`
-	err := db.QueryRow(query, newUser.FirstName, newUser.LastName, newUser.PhoneNumber, newUser.Email, newUser.Password, newUser.DOB, newUser.Gender, newUser.Borough).Scan(&newUser.ID)
+	err := db.QueryRow(query, user.FirstName, user.LastName, user.PhoneNumber, user.Email, user.Password, user.DOB, user.Gender, user.Borough).Scan(&user.ID)
 	if err != nil {
 		log.Println("Database insert error:", err)
 		return err
@@ -96,32 +96,54 @@ func GetUserQuery(name string) (models.User, error) {
 	return user, nil
 }
 
-// func GetAllBooksQuery() ([]models.Book, error) {
-// 	query := `SELECT id, title, author, quantity FROM books`
-// 	rows, err := db.Query(query)
-// 	if err != nil {
-// 		log.Println("Error fetching books:", err)
-// 		return nil, err
-// 	}
-// 	defer rows.Close()
+func GetViewableProfileQuery(id string) (models.ViewableProfile, error) {
 
-// 	var books []models.Book
-// 	for rows.Next() {
-// 		var b models.Book
-// 		if err := rows.Scan(&b.ID, &b.Title, &b.Author, &b.Quantity); err != nil {
-// 			log.Println("Error scanning book row:", err)
-// 			return nil, err
-// 		}
-// 		books = append(books, b)
-// 	}
+	var profile models.ViewableProfile
+	query := `SELECT first_name, gender, borough FROM users WHERE id = $1`
+	err := db.QueryRow(query, id).Scan(&profile.FirstName, &profile.Gender, &profile.Borough)
 
-// 	if err = rows.Err(); err != nil {
-// 		log.Println("Row iteration error:", err)
-// 		return nil, err
-// 	}
+	if err != nil {
+		return profile, err
+	}
 
-// 	return books, nil
-// }
+	query = `SELECT title, photo_url FROM activities WHERE user_id = $1`
+	rows, err := db.Query(query, id)
+	if err != nil {
+		log.Println("Error fetching activities:", err)
+		return profile, err
+	}
+	defer rows.Close()
+
+	var activities []models.ViewableActivity
+	for rows.Next() {
+		var a models.ViewableActivity
+		if err := rows.Scan(&a.Title, &a.PhotoURL); err != nil {
+			log.Println("Error scanning activity row:", err)
+			return profile, err
+		}
+		activities = append(activities, a)
+	}
+
+	if err = rows.Err(); err != nil {
+		log.Println("Row iteration error:", err)
+		return profile, err
+	}
+
+	profile.Activities = activities
+
+	return profile, nil
+}
+
+func CreateActivityQuery(activity models.Activity) error {
+	query := `INSERT INTO activities (user_id, title, photo_url, image_order) VALUES ($1, $2, $3, $4) RETURNING id`
+	err := db.QueryRow(query, activity.UserID, activity.Title, activity.PhotoURL, activity.ImageOrder).Scan(&activity.ID)
+	if err != nil {
+		log.Println("Database insert error:", err)
+		return err
+	}
+
+	return nil
+}
 
 // func ChangeBookQuantityQuery(id string, n int) error {
 // 	book, err := GetBookQuery(id)

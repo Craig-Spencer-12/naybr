@@ -1,12 +1,5 @@
 package models
 
-type Book struct {
-	ID       string `json:"id"`
-	Title    string `json:"title"`
-	Author   string `json:"author"`
-	Quantity int    `json:"quantity"`
-}
-
 type User struct {
 	FirstName   string `json:"firstName"`
 	LastName    string `json:"lastName"`
@@ -22,7 +15,22 @@ type User struct {
 	BIO             string `json:"bio"`
 }
 
-type Image struct {
-	ActivityName string `json:"activityName"`
-	URL          string `json:"url"`
+type Activity struct {
+	ID         string `json:"id"`
+	UserID     string `json:"userID"`
+	Title      string `json:"title"`
+	PhotoURL   string `json:"photoURL"`
+	ImageOrder int    `json:"imageOrder"`
+}
+
+type ViewableProfile struct {
+	FirstName  string             `json:"firstName"`
+	Gender     string             `json:"gender"`
+	Borough    string             `json:"borough"`
+	Activities []ViewableActivity `json:"activities"`
+}
+
+type ViewableActivity struct {
+	Title    string `json:"title"`
+	PhotoURL string `json:"photoURL"`
 }

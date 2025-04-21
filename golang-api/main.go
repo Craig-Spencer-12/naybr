@@ -8,12 +8,7 @@ import (
 )
 
 func main() {
-
 	database.InitMinIO()
-
-	// database.UploadImageQuery("test", "example.png", "./assets/example.png", "image/png")
-
 	database.InitDatabase()
-
 	router.RunRouter()
 }

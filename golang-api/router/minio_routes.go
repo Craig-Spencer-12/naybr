@@ -46,17 +46,14 @@ func GetImage(c *gin.Context) {
 	fileName := c.Param("filename")
 	bucketName := "test"
 
-	// Retrieve the object from MinIO
 	imageObject, err := database.GetImageQuery(bucketName, fileName)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get the file from MinIO"})
 	}
 	defer imageObject.Close()
 
-	// Set the correct Content-Type for the file (in this case, assuming it's an image)
-	c.Header("Content-Type", "image/png") // You can change this based on file type, dynamically if needed
+	c.Header("Content-Type", "image/png")
 
-	// Pipe the imageObject (image) to the response
 	_, err = io.Copy(c.Writer, imageObject)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to stream the image"})
