@@ -47,7 +47,7 @@ publish:
 # curl localhost:8080/activities --include --header "Content-Type: application/json" -d @exampleActivityPhotography.json --request "POST"
 # curl localhost:8080/profile/ebb97356-8167-4fd4-90e9-99bfb6d47489
 
-# curl -X POST -F "image=@/home/craig/Desktop/3.png" http://localhost:8080/image
+# curl -X POST -F "image=@/home/craig/Desktop/zachProfile.png" http://localhost:8080/image
 
 
 

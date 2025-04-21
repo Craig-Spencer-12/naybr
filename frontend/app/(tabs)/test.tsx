@@ -1,27 +1,35 @@
 import { View, Text, StyleSheet, Button, ActivityIndicator, Image, Platform } from 'react-native';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Urls } from '@/constants/Urls';
+import { Profile } from '@/types/Profile'
+import ProfileInfoBar from '@/components/ProfileInfoBar'
 
 import { Collapsible } from '@/components/Collapsible';
 import { ExternalLink } from '@/components/ExternalLink';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
-import { IconSymbol } from '@/components/ui/IconSymbol';
+import ActivityCard from '@/components/ActivityCard';
 
 export default function TestScreen() {
-  const [response, setResponse] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const [profile, setProfile] = useState<Profile | null>(null)
+  const [loading, setLoading] = useState(false)
 
-  const handleFetch = async () => {
+  useEffect(() => {
+    fetchProfile()
+  }, [])
+
+  const fetchProfile = async () => {
     setLoading(true);
     try {
-      const res = await fetch('http://192.168.1.209:8080/books'); // replace with your actual API URL
-      const data = await res.text(); // or use res.json() if it returns JSON
-      setResponse(data);
+      const res = await fetch(Urls.getProfile + 'ebb97356-8167-4fd4-90e9-99bfb6d47489')
+      const data: Profile = await res.json()
+      setProfile(data)
     } catch (err) {
-      setResponse(`Error: ${err}`);
+      setErrorMessage(`Error: ${err}`)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
   };
 
@@ -29,23 +37,31 @@ export default function TestScreen() {
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
       headerImage={
-        <IconSymbol
-          size={310}
-          color="#808080"
-          name="chevron.left.forwardslash.chevron.right"
-          style={styles.headerImage}
-        />
+        <Image source={{ uri: "http://192.168.1.209:8080/image/zachProfile2.png" }} style={{ width: '100%', height: '100%' }}/>
       }>
       <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Test</ThemedText>
+        <ThemedText type="title">{profile?.firstName}</ThemedText>
       </ThemedView>
-      <ThemedText>Testing the ability to ping my api locally</ThemedText>
+      <ProfileInfoBar age={25} gender="Male" borough="Brooklyn" />
+      <ThemedText>Hey my name's Zach! I'm just a little guy here to make some friends!</ThemedText>
 
-      <View style={styles.container}>
-      <Button title="Call API" onPress={handleFetch} />
-      {loading && <ActivityIndicator size="large" style={{ marginTop: 20 }} />}
-      {response && <Text style={styles.text}>{response}</Text>}
+      <View>
+      {profile?.activities.map((activity, index) => (
+        <ActivityCard
+          key={index}
+          title={activity.title}
+          photoURL={Urls.minio + activity.photoURL}
+        />
+      ))}
     </View>
+
+      {/* <View style={styles.container}>
+        <Button title="Call API" onPress={fetchProfile} />
+        {loading && <ActivityIndicator size="large" style={{ marginTop: 20 }} />}
+        {errorMessage && <Text style={styles.text}>{errorMessage}</Text>}
+      </View> */}
+
+      
     </ParallaxScrollView>
   );
 }
