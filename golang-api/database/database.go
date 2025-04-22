@@ -103,8 +103,8 @@ func GetViewableProfileQuery(id string) (models.ViewableProfile, error) {
 
 	var profile models.ViewableProfile
 	var dob string
-	query := `SELECT first_name, date_of_birth, gender, borough FROM users WHERE id = $1`
-	err := db.QueryRow(query, id).Scan(&profile.FirstName, &dob, &profile.Gender, &profile.Borough)
+	query := `SELECT first_name, date_of_birth, gender, borough, bio, profile_photo_url FROM users WHERE id = $1`
+	err := db.QueryRow(query, id).Scan(&profile.FirstName, &dob, &profile.Gender, &profile.Borough, &profile.BIO, &profile.ProfilePhotoURL)
 
 	if err != nil {
 		return profile, err

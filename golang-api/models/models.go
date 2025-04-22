@@ -11,8 +11,8 @@ type User struct {
 	Borough     string `json:"borough"`
 
 	ID              string `json:"id"`
-	ProfilePhotoURL string `json:"profilePhotoURL"`
 	BIO             string `json:"bio"`
+	ProfilePhotoURL string `json:"profilePhotoURL"`
 }
 
 type Activity struct {
@@ -24,11 +24,13 @@ type Activity struct {
 }
 
 type ViewableProfile struct {
-	FirstName  string             `json:"firstName"`
-	Age        int                `json:"age"`
-	Gender     string             `json:"gender"`
-	Borough    string             `json:"borough"`
-	Activities []ViewableActivity `json:"activities"`
+	FirstName       string             `json:"firstName"`
+	Age             int                `json:"age"`
+	Gender          string             `json:"gender"`
+	Borough         string             `json:"borough"`
+	Activities      []ViewableActivity `json:"activities"`
+	BIO             string             `json:"bio"`
+	ProfilePhotoURL string             `json:"profilePhotoURL"`
 }
 
 type ViewableActivity struct {
