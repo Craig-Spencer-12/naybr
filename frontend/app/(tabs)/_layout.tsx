@@ -1,5 +1,5 @@
 import { Tabs } from 'expo-router';
-import React from 'react';
+import React, { useState } from 'react';
 import { Platform } from 'react-native';
 
 import { HapticTab } from '@/components/HapticTab';
@@ -22,36 +22,47 @@ export default function TabLayout() {
           ios: {
             // Use a transparent background on iOS to show the blur effect
             position: 'absolute',
+            paddingTop: 10,
+            height: 80,
           },
           default: {},
         }),
+        tabBarShowLabel: false,
       }}>
+        <Tabs.Screen
+        name="naybrs"
+        options={{
+          title: 'Naybrs',
+          tabBarIcon: ({ color }) => <IconSymbol size={37} name="house.fill" color={color} />,
+        }}
+        // options={{
+        //   tabBarIcon: ({ color, focused }) => (
+        //     <AnimatedTabIcon
+        //       focused={focused}
+        //       icon={<IconSymbol size={28} name="house.fill" color={color} />}
+        //     />
+        //   ),
+        // }}
+      />
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+          title: 'Likes',
+          tabBarIcon: ({ color }) => <IconSymbol size={37} name="heart.fill" color={color} />,
         }}
       />
       <Tabs.Screen
         name="explore"
         options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
-        }}
-      />
-      <Tabs.Screen
-        name="test"
-        options={{
-          title: 'Test',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          title: 'Messages',
+          tabBarIcon: ({ color }) => <IconSymbol size={37} name="bubble.left.and.bubble.right.fill" color={color} />,
         }}
       />
       <Tabs.Screen
         name="image"
         options={{
-          title: 'Image',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          title: 'Me',
+          tabBarIcon: ({ color }) => <IconSymbol size={37} name="person.fill" color={color} />,
         }}
       />
     </Tabs>

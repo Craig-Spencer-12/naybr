@@ -11,7 +11,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import ActivityCard from '@/components/ActivityCard';
 
-export default function TestScreen() {
+export default function NaybrsScreen() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const [profile, setProfile] = useState<Profile | null>(null)
   const [loading, setLoading] = useState(false)
