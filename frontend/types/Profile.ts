@@ -1,11 +1,11 @@
 export type Profile = {
     firstName: string,
-    profilePhotoURL: string,
     age: number,
     gender: string,
     borough: string,
-    bio: string,
     activities: Activity[]
+    bio: string,
+    profilePhotoURL: string,
 }
 
 export type Activity = {

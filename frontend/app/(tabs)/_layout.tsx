@@ -44,7 +44,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="messages"
         options={{
           title: 'Messages',
           tabBarIcon: ({ color }) => <IconSymbol size={37} name="bubble.left.and.bubble.right.fill" color={color} />,
