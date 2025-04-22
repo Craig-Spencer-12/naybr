@@ -1,0 +1,10 @@
+{
+    "firstName" : "Bob",
+    "phoneNumber" : "1112224444",
+    "email" : "b@gmail.com",
+    "password" : "12344",
+    "dateOfBirth" : "01/11/1999",
+    "gender" : "M",
+    "borough" : "Queens",
+    "bio" : "yuh"
+}

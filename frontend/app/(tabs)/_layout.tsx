@@ -35,14 +35,6 @@ export default function TabLayout() {
           title: 'Naybrs',
           tabBarIcon: ({ color }) => <IconSymbol size={37} name="house.fill" color={color} />,
         }}
-        // options={{
-        //   tabBarIcon: ({ color, focused }) => (
-        //     <AnimatedTabIcon
-        //       focused={focused}
-        //       icon={<IconSymbol size={28} name="house.fill" color={color} />}
-        //     />
-        //   ),
-        // }}
       />
       <Tabs.Screen
         name="index"
@@ -63,6 +55,13 @@ export default function TabLayout() {
         options={{
           title: 'Me',
           tabBarIcon: ({ color }) => <IconSymbol size={37} name="person.fill" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="signup"
+        options={{
+          title: 'Add User',
+          tabBarIcon: ({ color }) => <IconSymbol size={37} name="hammer.fill" color={color} />,
         }}
       />
     </Tabs>

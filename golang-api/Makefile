@@ -42,7 +42,7 @@ publish:
 # \dt
 # SELECT * FROM books;
 
-# curl localhost:8080/user --include --header "Content-Type: application/json" -d @exampleProfile.json --request "POST"
+# curl localhost:8080/user --include --header "Content-Type: application/json" -d @exampleProfile2.json --request "POST"
 # curl localhost:8080/activities --include --header "Content-Type: application/json" -d @exampleActivityGuitar.json --request "POST"
 # curl localhost:8080/activities --include --header "Content-Type: application/json" -d @exampleActivityPhotography.json --request "POST"
 # curl localhost:8080/profile/ebb97356-8167-4fd4-90e9-99bfb6d47489

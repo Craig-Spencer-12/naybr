@@ -34,16 +34,16 @@ func InitDatabase() {
 
 	createTableQuery := `CREATE TABLE IF NOT EXISTS users (
 		id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+		first_name VARCHAR(100),
+		last_name VARCHAR(100),
 		phone_number VARCHAR(15) UNIQUE NOT NULL,
 		email VARCHAR(100) UNIQUE NOT NULL,
 		password VARCHAR(255) NOT NULL,
-		first_name VARCHAR(100),
-		last_name VARCHAR(100),
 		date_of_birth DATE,
 		gender VARCHAR(10),
-		profile_photo_url VARCHAR(255),
-		bio TEXT,
 		borough VARCHAR(255),
+		bio TEXT,
+		profile_photo_url VARCHAR(255),
 		created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 		updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 	);
@@ -74,8 +74,10 @@ func InitDatabase() {
 }
 
 func CreateUserQuery(user models.User) error {
-	query := `INSERT INTO users (first_name, last_name, phone_number, email, password, date_of_birth, gender, borough) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id`
-	err := db.QueryRow(query, user.FirstName, user.LastName, user.PhoneNumber, user.Email, user.Password, user.DOB, user.Gender, user.Borough).Scan(&user.ID)
+	query := `INSERT INTO users (first_name, date_of_birth, gender, borough, bio) VALUES ($1, $2, $3, $4, $5) RETURNING id`
+	// last_name, phone_number, email, password,
+	// user.LastName, user.PhoneNumber, user.Email, user.Password,
+	err := db.QueryRow(query, user.FirstName, user.DOB, user.Gender, user.Borough, user.BIO).Scan(&user.ID)
 	if err != nil {
 		log.Println("Database insert error:", err)
 		return err
