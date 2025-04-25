@@ -3,8 +3,6 @@ package database
 import (
 	"context"
 	"log"
-	"os"
-	"strings"
 
 	"github.com/minio/minio-go/v7"
 	"github.com/minio/minio-go/v7/pkg/credentials"
@@ -13,10 +11,14 @@ import (
 var minioClient *minio.Client
 
 func InitMinIO() {
-	endpoint := os.Getenv("S3_ENDPOINT")
-	endpoint = strings.TrimPrefix(endpoint, "http://")
-	accessKey := os.Getenv("S3_ACCESS_KEY")
-	secretKey := os.Getenv("S3_SECRET_KEY")
+	// endpoint := os.Getenv("S3_ENDPOINT")
+	// endpoint = strings.TrimPrefix(endpoint, "http://")
+	// accessKey := os.Getenv("S3_ACCESS_KEY")
+	// secretKey := os.Getenv("S3_SECRET_KEY")
+
+	endpoint := "minio:9000"
+	accessKey := "minioadmin"
+	secretKey := "minioadmin"
 
 	// log.Println("Sleeping for 5 seconds to let MinIO wake up...")
 	// time.Sleep(5 * time.Second)
@@ -33,9 +35,7 @@ func InitMinIO() {
 	}
 }
 
-func UploadImageQuery(bucket string, name string, path string) error {
-
-	contentType := "image/png"
+func UploadImageQuery(bucket string, name string, path string, contentType string) error {
 
 	_, err := minioClient.FPutObject(context.Background(), bucket, name, path, minio.PutObjectOptions{ContentType: contentType})
 	if err != nil {

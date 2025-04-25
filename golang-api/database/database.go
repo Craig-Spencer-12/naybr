@@ -6,23 +6,29 @@ import (
 	"example/golang-api/models"
 	"fmt"
 	"log"
-	"os"
 )
 
 var db *sql.DB
 
 func InitDatabase() {
 
-	dbHost := os.Getenv("DB_HOST")
-	dbPort := os.Getenv("DB_PORT")
-	dbUser := os.Getenv("DB_USER")
-	dbPassword := os.Getenv("DB_PASSWORD")
-	dbName := os.Getenv("DB_NAME")
+	// dbHost := os.Getenv("DB_HOST")
+	// dbPort := os.Getenv("DB_PORT")
+	// dbUser := os.Getenv("DB_USER")
+	// dbPassword := os.Getenv("DB_PASSWORD")
+	// dbName := os.Getenv("DB_NAME")
+
+	dbHost := "db"
+	dbPort := "5432"
+	dbUser := "user"
+	dbPassword := "password"
+	dbName := "mydb"
 
 	dsn := fmt.Sprintf(
 		"host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
 		dbHost, dbPort, dbUser, dbPassword, dbName,
 	)
+	
 
 	var err error
 	db, err = sql.Open("postgres", dsn)

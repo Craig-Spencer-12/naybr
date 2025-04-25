@@ -9,6 +9,6 @@ import (
 
 func main() {
 	database.InitMinIO()
-	database.InitDatabase()
+	// database.InitDatabase()
 	router.RunRouter()
 }

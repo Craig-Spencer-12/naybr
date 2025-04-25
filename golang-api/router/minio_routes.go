@@ -14,7 +14,7 @@ func UploadImage(c *gin.Context) {
 
 	file, fileHeader, err := c.Request.FormFile("image")
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "No file uploaded"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 	defer file.Close()
@@ -32,7 +32,7 @@ func UploadImage(c *gin.Context) {
 		return
 	}
 
-	err = database.UploadImageQuery("test", fileHeader.Filename, tmpFile.Name())
+	err = database.UploadImageQuery("test", fileHeader.Filename, tmpFile.Name(), "image/jpeg")
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to upload file to MinIO"})
 		return
