@@ -1,4 +1,4 @@
-import { View, StyleSheet, Image, Button, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Image, Button, TouchableOpacity, Alert } from 'react-native';
 import React from 'react';
 import { Urls } from '@/constants/Urls';
 import { Activity, Like, Profile } from '@/types/Profile'
@@ -9,32 +9,36 @@ import { ThemedView } from '@/components/ThemedView';
 import ActivityCard from '@/components/ActivityCard';
 import { IconSymbol } from './ui/IconSymbol';
 
-type Props = {
-  user: Profile
-  likable: boolean;
-};
+
+var currentUser = {
+  id: '3f07b805-d67c-4b8b-b214-bc72ca75ed78'
+}
 
 async function sendLike(activity: Activity) {
   let like: Like = {
-    likerId: activity.id, // TODO Make this the current users id
-    likedId: activity.userId,
+    likerId: currentUser.id,
+    likedId: activity.userID,
     activityId: activity.id
   }
 
+  Alert.alert("this", activity.userID)
+  
   try {
-    let response = await fetch('http://192.168.1.209:8080/like', {
+    fetch('http://192.168.1.209:8080/like', {
       method: 'POST',
       body: JSON.stringify(like),
     })
-
-    return response.ok
-
+    
   } catch (err) {
     console.log('Upload error:', err)
     return false
   }
 }
 
+type Props = {
+  user: Profile
+  likable: boolean;
+};
 
 export default function UserProfileView({ user, likable }: Props) {
   return (
@@ -51,7 +55,7 @@ export default function UserProfileView({ user, likable }: Props) {
 
       <View style={styles.container}>
         {user.activities.map((activity, index) => (
-          <View style={styles.activityContainer}>
+          <View key={index} style={styles.activityContainer}>
             <ActivityCard
               key={index}
               title={activity.title}

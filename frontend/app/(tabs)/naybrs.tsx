@@ -17,7 +17,6 @@ export default function NaybrsScreen() {
     setLoading(true);
     try {
       const res = await fetch(Urls.getProfile + 'ebb97356-8167-4fd4-90e9-99bfb6d47489')
-      // Alert.alert('Test',await res.text())
       const data: Profile = await res.json()
       setProfile(data)
     } catch (err) {
@@ -43,13 +42,13 @@ const emptyUser: Profile = {
       title: 'Robot Making',
       photoURL: '3.png',
       id: '',
-      userId: ''
+      userID: ''
     },
     {
       title: 'Surfing',
       photoURL: 'example.png',
       id: '',
-      userId: ''
+      userID: ''
     }
   ]
 };

@@ -14,13 +14,13 @@ export default function EditScreen() {
         title: 'Robot Maker',
         photoURL: '3.png',
         id: '123',
-        userId: 'testID'
+        userID: 'testID'
       },
       {
         title: 'Surfer',
         photoURL: 'example.png',
         id: '456',
-        userId: 'testID'
+        userID: 'testID'
       }
     ]
   };
