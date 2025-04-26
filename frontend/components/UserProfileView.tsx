@@ -1,19 +1,47 @@
-import { View, StyleSheet, Image } from 'react-native';
+import { View, StyleSheet, Image, Button, TouchableOpacity } from 'react-native';
 import React from 'react';
 import { Urls } from '@/constants/Urls';
-import { Profile } from '@/types/Profile'
+import { Activity, Like, Profile } from '@/types/Profile'
 import ProfileInfoBar from '@/components/ProfileInfoBar'
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import ActivityCard from '@/components/ActivityCard';
+import { IconSymbol } from './ui/IconSymbol';
 
-export default function UserProfileView({ user }: { user: Profile }) {
+type Props = {
+  user: Profile
+  likable: boolean;
+};
+
+async function sendLike(activity: Activity) {
+  let like: Like = {
+    likerId: activity.id, // TODO Make this the current users id
+    likedId: activity.userId,
+    activityId: activity.id
+  }
+
+  try {
+    let response = await fetch('http://192.168.1.209:8080/like', {
+      method: 'POST',
+      body: JSON.stringify(like),
+    })
+
+    return response.ok
+
+  } catch (err) {
+    console.log('Upload error:', err)
+    return false
+  }
+}
+
+
+export default function UserProfileView({ user, likable }: Props) {
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
       headerImage={
-        <Image source={{ uri: Urls.minio + user.profilePhotoURL }} style={{ width: '100%', height: '100%' }}/>
+        <Image source={{ uri: Urls.minio + user.profilePhotoURL }} style={{ width: '100%', height: '100%' }} />
       }>
       <ThemedView style={styles.titleContainer}>
         <ThemedText type="title">{user.firstName}</ThemedText>
@@ -21,15 +49,26 @@ export default function UserProfileView({ user }: { user: Profile }) {
       <ProfileInfoBar age={user.age} gender={user.gender} borough={user.borough} />
       <ThemedText>{user.bio}</ThemedText>
 
-      <View>
-      {user.activities.map((activity, index) => (
-        <ActivityCard
-          key={index}
-          title={activity.title}
-          photoURL={Urls.minio + activity.photoURL}
-        />
-      ))}
-    </View>
+      <View style={styles.container}>
+        {user.activities.map((activity, index) => (
+          <View style={styles.activityContainer}>
+            <ActivityCard
+              key={index}
+              title={activity.title}
+              photoURL={Urls.minio + activity.photoURL}
+            />
+            {likable && (
+              <View style={styles.likeContainer}>
+                <View style={styles.circle}></View>
+                <TouchableOpacity onPress={() => sendLike(activity)}>
+                  <IconSymbol size={40} name="heart.fill" color={'#ffffff'} />
+                </TouchableOpacity>
+              </View>
+            )}
+
+          </View>
+        ))}
+      </View>
     </ParallaxScrollView>
   );
 }
@@ -56,4 +95,25 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: '#808080',
   },
+  likeContainer: {
+    position: 'absolute',
+    top: '75%', // adjust as needed
+    left: '85%', // adjust as needed
+    // width: 50,
+    // height: 50,
+    // borderRadius: 25,
+    // backgroundColor: '#333333'
+  },
+  activityContainer: {
+
+  },
+  circle: {
+    position: 'absolute',
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    backgroundColor: '#333333',
+    top: '-21%', // adjust as needed
+    left: '-26%', // adjust as needed
+  }
 });

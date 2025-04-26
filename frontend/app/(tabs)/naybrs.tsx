@@ -27,7 +27,7 @@ export default function NaybrsScreen() {
     }
   };
 
-  return <UserProfileView user={profile} />
+  return <UserProfileView user={profile} likable={true}/>
 }
 
 
@@ -42,10 +42,14 @@ const emptyUser: Profile = {
     {
       title: 'Robot Making',
       photoURL: '3.png',
+      id: '',
+      userId: ''
     },
     {
       title: 'Surfing',
       photoURL: 'example.png',
+      id: '',
+      userId: ''
     }
   ]
 };

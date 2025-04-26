@@ -20,6 +20,14 @@ export type EditProfile = {
 }
 
 export type Activity = {
-    title: string,
+    id: string
+    userId: string
+    title: string
     photoURL: string
+}
+
+export type Like = {
+    likerId: string
+    likedId: string
+    activityId: string
 }

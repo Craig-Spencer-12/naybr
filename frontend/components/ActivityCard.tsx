@@ -2,7 +2,12 @@ import React from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
 import { Activity } from '@/types/Profile'
 
-export default function ActivityCard({ title, photoURL }: Activity) {
+type Props = {
+  title: string,
+  photoURL: string
+};
+
+export default function ActivityCard({ title, photoURL }: Props) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{title}</Text>

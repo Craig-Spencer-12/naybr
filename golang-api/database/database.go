@@ -28,7 +28,6 @@ func InitDatabase() {
 		"host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
 		dbHost, dbPort, dbUser, dbPassword, dbName,
 	)
-	
 
 	var err error
 	db, err = sql.Open("postgres", dsn)

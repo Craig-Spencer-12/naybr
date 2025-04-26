@@ -13,13 +13,17 @@ export default function EditScreen() {
       {
         title: 'Robot Maker',
         photoURL: '3.png',
+        id: '123',
+        userId: 'testID'
       },
       {
         title: 'Surfer',
         photoURL: 'example.png',
+        id: '456',
+        userId: 'testID'
       }
     ]
   };
 
-  return <UserProfileView user={currentUser} />;
+  return <UserProfileView user={currentUser} likable={false}/>;
 }
