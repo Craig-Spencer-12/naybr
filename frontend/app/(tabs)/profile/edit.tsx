@@ -1,24 +1,28 @@
 import { EditProfile } from '@/types/Profile';
-import { StyleSheet, View, Text } from 'react-native'
+import { StyleSheet, View, Text, KeyboardAvoidingView, Button, TouchableOpacity } from 'react-native'
 
 import { Image, Platform } from 'react-native';
-
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 
-import type { PropsWithChildren, ReactElement } from 'react';
 import Animated, {
   useAnimatedRef,
-  useScrollViewOffset,
 } from 'react-native-reanimated';
 
 import { useBottomTabOverflow } from '@/components/ui/TabBarBackground';
-import { useColorScheme } from '@/hooks/useColorScheme';
 import UploadImageButton from '@/components/UploadImage';
+import EditableText from '@/components/EditableText';
+
+import { useNavigation } from '@react-navigation/native';
 
 export default function ProfileScreen() {
+
+  const navigation = useNavigation(); // Hook to navigate
+
+  // Function to navigate to the BoroughSelectionScreen
+  const handleNavigateToBorough = () => {
+    navigation.navigate('Borough');
+  };
 
   const currentUser: EditProfile = {
     firstName: 'Craig',
@@ -43,34 +47,36 @@ export default function ProfileScreen() {
   const bottom = useBottomTabOverflow();
 
   return (
-    <ThemedView style={styles.container}>
-      <Animated.ScrollView
-        showsVerticalScrollIndicator={false}
-        ref={scrollRef}
-        scrollEventThrottle={16}
-        scrollIndicatorInsets={{ bottom }}
-        contentContainerStyle={{ paddingBottom: bottom }}>
-          <UploadImageButton defaultUri='test123.jpeg'/>
-        <ThemedView style={styles.content}>
-          <ThemedText type="title">{currentUser.firstName} {currentUser.lastName}</ThemedText>
-        </ThemedView>
-        <ThemedView style={styles.content}>
-          <ThemedText type="subtitle">upload image</ThemedText>
-          {/* <ThemedText>
-      
-            Press{' '}
-            <ThemedText type="defaultSemiBold">
-              {Platform.select({
-                ios: 'cmd + d',
-                android: 'cmd + m',
-                web: 'F12'
-              })}
-            </ThemedText>{' '}
-            to open developer tools.
-          </ThemedText> */}
-        </ThemedView>
-      </Animated.ScrollView>
-    </ThemedView>
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={80}
+    >
+      <ThemedView style={styles.container}>
+        <Animated.ScrollView
+          showsVerticalScrollIndicator={false}
+          ref={scrollRef}
+          scrollEventThrottle={16}
+          scrollIndicatorInsets={{ bottom }}
+          contentContainerStyle={{ paddingBottom: bottom }}>
+          <UploadImageButton defaultUri='test123.jpeg' />
+          <ThemedView style={styles.content}>
+            <ThemedText type="title">{currentUser.firstName} {currentUser.lastName}</ThemedText>
+          </ThemedView>
+          <ThemedView style={styles.content}>
+
+            <EditableText initialValue="user@example.com" onSave={(val) => console.log('Saved:', val)} />
+            <EditableText initialValue="Male" onSave={(val) => console.log('Saved:', val)} />
+            <EditableText initialValue="This is the bio" onSave={(val) => console.log('Saved:', val)} />
+
+            <TouchableOpacity onPress={handleNavigateToBorough}>
+              <Text style={{ color: 'blue', marginTop: 20 }}>Change Borough</Text>
+            </TouchableOpacity>
+
+          </ThemedView>
+        </Animated.ScrollView>
+      </ThemedView>
+    </KeyboardAvoidingView>
   );
 }
 
