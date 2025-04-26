@@ -1,5 +1,5 @@
 import { View, StyleSheet, Image, Button, TouchableOpacity, Alert } from 'react-native';
-import React from 'react';
+import React, { useState } from 'react';
 import { Urls } from '@/constants/Urls';
 import { Activity, Like, Profile } from '@/types/Profile'
 import ProfileInfoBar from '@/components/ProfileInfoBar'
@@ -22,17 +22,25 @@ async function sendLike(activity: Activity) {
   }
 
   Alert.alert("this", activity.userID)
-  
+
   try {
     fetch('http://192.168.1.209:8080/like', {
       method: 'POST',
       body: JSON.stringify(like),
     })
-    
+
   } catch (err) {
     console.log('Upload error:', err)
     return false
   }
+}
+
+
+async function notLike() { // TODO fix this function
+  // let newUser = userInView
+  // newUser!.firstName = "We did it!"
+  // setUserInView(newUser)
+  Alert.alert("this", "that")
 }
 
 type Props = {
@@ -40,40 +48,57 @@ type Props = {
   likable: boolean;
 };
 
+
+
+
 export default function UserProfileView({ user, likable }: Props) {
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
-      headerImage={
-        <Image source={{ uri: Urls.minio + user.profilePhotoURL }} style={{ width: '100%', height: '100%' }} />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">{user.firstName}</ThemedText>
-      </ThemedView>
-      <ProfileInfoBar age={user.age} gender={user.gender} borough={user.borough} />
-      <ThemedText>{user.bio}</ThemedText>
+    <View style={{ flex: 1 }}>
+      <ParallaxScrollView
+        headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
+        headerImage={
+          <Image source={{ uri: Urls.minio + user!.profilePhotoURL }} style={{ width: '100%', height: '100%' }} />
+        }>
+        <ThemedView style={styles.titleContainer}>
+          <ThemedText type="title">{user!.firstName}</ThemedText>
+        </ThemedView>
+        <ProfileInfoBar age={user!.age} gender={user!.gender} borough={user!.borough} />
+        <ThemedText>{user!.bio}</ThemedText>
 
-      <View style={styles.container}>
-        {user.activities.map((activity, index) => (
-          <View key={index} style={styles.activityContainer}>
-            <ActivityCard
-              key={index}
-              title={activity.title}
-              photoURL={Urls.minio + activity.photoURL}
-            />
-            {likable && (
-              <View style={styles.likeContainer}>
-                <View style={styles.circle}></View>
-                <TouchableOpacity onPress={() => sendLike(activity)}>
-                  <IconSymbol size={40} name="heart.fill" color={'#ffffff'} />
-                </TouchableOpacity>
-              </View>
-            )}
+        <View style={styles.container}>
+          {user!.activities.map((activity, index) => (
+            <View key={index} style={styles.activityContainer}>
+              <ActivityCard
+                key={index}
+                title={activity.title}
+                photoURL={Urls.minio + activity.photoURL}
+              />
+              {likable && (
+                <View style={styles.likeContainer}>
+                  <TouchableOpacity onPress={() => sendLike(activity)}>
+                    <View style={styles.circle}>
+                      <IconSymbol size={40} name="heart.fill" color={'#ffffff'} />
+                    </View>
+                  </TouchableOpacity>
+                </View>
+              )}
 
-          </View>
-        ))}
-      </View>
-    </ParallaxScrollView>
+            </View>
+          ))}
+        </View>
+      </ParallaxScrollView>
+
+      {likable && (
+        <View style={styles.notLikeContainer}>
+          <TouchableOpacity onPress={notLike}>
+            <View style={styles.notLikeCircle}>
+              <IconSymbol size={40} name="xmark" color={'#ffffff'} />
+            </View>
+          </TouchableOpacity>
+        </View>
+      )}
+    </View>
   );
 }
 
@@ -103,21 +128,35 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: '75%', // adjust as needed
     left: '85%', // adjust as needed
-    // width: 50,
-    // height: 50,
-    // borderRadius: 25,
-    // backgroundColor: '#333333'
   },
   activityContainer: {
 
   },
   circle: {
-    position: 'absolute',
     width: 60,
     height: 60,
-    borderRadius: 30,
-    backgroundColor: '#333333',
-    top: '-21%', // adjust as needed
-    left: '-26%', // adjust as needed
+    borderRadius: 30, // half the width/height for a perfect circle
+    backgroundColor: '#353636',
+    justifyContent: 'center',  // centers icon vertically
+    alignItems: 'center',      // centers icon horizontally
+
+    shadowColor: '#000',
+    shadowOpacity: 0.3,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 4,
+    elevation: 5, // Android shadow
+  },
+  notLikeContainer: {
+    position: 'absolute',
+    top: '80%', // adjust as needed
+    left: '5%', // adjust as needed
+  },
+  notLikeCircle: {
+    width: 60,
+    height: 60,
+    borderRadius: 30, // half the width/height for a perfect circle
+    backgroundColor: '#A05051',
+    justifyContent: 'center',  // centers icon vertically
+    alignItems: 'center',      // centers icon horizontally
   }
 });
