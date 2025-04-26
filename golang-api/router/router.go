@@ -18,5 +18,7 @@ func RunRouter() {
 	engine.POST("/image", UploadImage)
 	engine.GET("/image/:filename", GetImage)
 
+	engine.POST("/like", SendLike)
+
 	engine.Run(":8080")
 }

@@ -73,6 +73,22 @@ func CreateActivity(c *gin.Context) {
 	c.IndentedJSON(http.StatusCreated, newActivity)
 }
 
+func SendLike(c *gin.Context) {
+	var newLike models.Like
+
+	if err := c.BindJSON(&newLike); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"Message": "Failed to bind json to object", "Error": err})
+		return
+	}
+
+	if err := database.SendLikeQuery(newLike); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"Message": "Failed to send like", "Error": err})
+		return
+	}
+
+	c.IndentedJSON(http.StatusCreated, newLike)
+}
+
 // func CheckoutBook(c *gin.Context) {
 // 	id, ok := c.GetQuery("id")
 

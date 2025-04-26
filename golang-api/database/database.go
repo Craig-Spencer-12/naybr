@@ -76,6 +76,19 @@ func InitDatabase() {
 		log.Printf("Table created or already exists")
 	}
 
+	createTableQuery = `CREATE TABLE IF NOT EXISTS likes (
+	    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+	    liker_id UUID REFERENCES users(id) ON DELETE CASCADE,
+	    liked_id UUID REFERENCES users(id) ON DELETE CASCADE,
+		activity_id UUID REFERENCES activities(id),
+	    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+	);`
+	_, err = db.Exec(createTableQuery)
+	if err != nil {
+		log.Fatalf("Failed to create table: %v", err)
+	} else {
+		log.Printf("Table created or already exists")
+	}
 }
 
 func CreateUserQuery(user models.User) error {
@@ -104,12 +117,12 @@ func GetUserQuery(name string) (models.User, error) {
 	return user, nil
 }
 
-func GetViewableProfileQuery(id string) (models.ViewableProfile, error) {
+func GetViewableProfileQuery(userId string) (models.ViewableProfile, error) {
 
 	var profile models.ViewableProfile
 	var dob string
 	query := `SELECT first_name, date_of_birth, gender, borough, bio, profile_photo_url FROM users WHERE id = $1`
-	err := db.QueryRow(query, id).Scan(&profile.FirstName, &dob, &profile.Gender, &profile.Borough, &profile.BIO, &profile.ProfilePhotoURL)
+	err := db.QueryRow(query, userId).Scan(&profile.FirstName, &dob, &profile.Gender, &profile.Borough, &profile.BIO, &profile.ProfilePhotoURL)
 
 	if err != nil {
 		return profile, err
@@ -120,18 +133,18 @@ func GetViewableProfileQuery(id string) (models.ViewableProfile, error) {
 		return profile, err
 	}
 
-	query = `SELECT title, photo_url FROM activities WHERE user_id = $1`
-	rows, err := db.Query(query, id)
+	query = `SELECT id, user_id, title, photo_url FROM activities WHERE user_id = $1`
+	rows, err := db.Query(query, userId)
 	if err != nil {
 		log.Println("Error fetching activities:", err)
 		return profile, err
 	}
 	defer rows.Close()
 
-	var activities []models.ViewableActivity
+	var activities []models.Activity
 	for rows.Next() {
-		var a models.ViewableActivity
-		if err := rows.Scan(&a.Title, &a.PhotoURL); err != nil {
+		var a models.Activity
+		if err := rows.Scan(&a.ID, &a.UserID, &a.Title, &a.PhotoURL); err != nil {
 			log.Println("Error scanning activity row:", err)
 			return profile, err
 		}
@@ -151,6 +164,20 @@ func GetViewableProfileQuery(id string) (models.ViewableProfile, error) {
 func CreateActivityQuery(activity models.Activity) error {
 	query := `INSERT INTO activities (user_id, title, photo_url, image_order) VALUES ($1, $2, $3, $4) RETURNING id`
 	err := db.QueryRow(query, activity.UserID, activity.Title, activity.PhotoURL, activity.ImageOrder).Scan(&activity.ID)
+	if err != nil {
+		log.Println("Database insert error:", err)
+		return err
+	}
+
+	return nil
+}
+
+func SendLikeQuery(like models.Like) error {
+
+	log.Printf("%s %s %s", like.LikerID, like.LikedID, like.ActivityID)
+
+	query := `INSERT INTO likes (liker_id, liked_id, activity_id) VALUES ($1, $2, $3) RETURNING id`
+	err := db.QueryRow(query, like.LikerID, like.LikedID, like.ActivityID).Scan(&like.ID)
 	if err != nil {
 		log.Println("Database insert error:", err)
 		return err

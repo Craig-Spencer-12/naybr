@@ -23,17 +23,19 @@ type Activity struct {
 	ImageOrder int    `json:"imageOrder"`
 }
 
-type ViewableProfile struct {
-	FirstName       string             `json:"firstName"`
-	Age             int                `json:"age"`
-	Gender          string             `json:"gender"`
-	Borough         string             `json:"borough"`
-	Activities      []ViewableActivity `json:"activities"`
-	BIO             string             `json:"bio"`
-	ProfilePhotoURL string             `json:"profilePhotoURL"`
+type Like struct {
+	ID         string `json:"id"`
+	LikerID    string `json:"likerId"`
+	LikedID    string `json:"likedId"`
+	ActivityID string `json:"activityId"`
 }
 
-type ViewableActivity struct {
-	Title    string `json:"title"`
-	PhotoURL string `json:"photoURL"`
+type ViewableProfile struct {
+	FirstName       string     `json:"firstName"`
+	Age             int        `json:"age"`
+	Gender          string     `json:"gender"`
+	Borough         string     `json:"borough"`
+	Activities      []Activity `json:"activities"`
+	BIO             string     `json:"bio"`
+	ProfilePhotoURL string     `json:"profilePhotoURL"`
 }
