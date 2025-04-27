@@ -17,6 +17,17 @@ import (
 // 	c.IndentedJSON(http.StatusOK, books)
 // }
 
+func GetRandomUserId(c *gin.Context) {
+	id, err := database.GetRandomUserIdQuery()
+
+	if err != nil {
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
+		return
+	}
+
+	c.IndentedJSON(http.StatusOK, id)
+}
+
 func GetUserByName(c *gin.Context) {
 	name := c.Param("name")
 	user, err := database.GetUserQuery(name)

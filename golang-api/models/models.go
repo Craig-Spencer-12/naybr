@@ -15,6 +15,10 @@ type User struct {
 	ProfilePhotoURL string `json:"profilePhotoURL"`
 }
 
+// type ReturnID struct {
+// 	ID string `json:"id"`
+// }
+
 type Activity struct {
 	ID         string `json:"id"`
 	UserID     string `json:"userID"`

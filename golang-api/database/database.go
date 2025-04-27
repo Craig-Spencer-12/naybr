@@ -104,6 +104,19 @@ func CreateUserQuery(user models.User) error {
 	return nil
 }
 
+func GetRandomUserIdQuery() (string, error) {
+
+	var id string
+	query := `SELECT id FROM users ORDER BY RANDOM() LIMIT 1`
+	err := db.QueryRow(query).Scan(&id)
+
+	if err != nil {
+		return "", err
+	}
+
+	return id, nil
+}
+
 func GetUserQuery(name string) (models.User, error) {
 
 	var user models.User
