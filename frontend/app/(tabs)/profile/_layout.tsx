@@ -8,6 +8,9 @@ import ViewScreen from './view';
 import BoroughScreen from './borough';
 import { Text, TouchableOpacity } from 'react-native';
 import { useNavigation } from 'expo-router';
+import NewActivityScreen from './newActivity';
+import GenderScreen from './gender';
+import BioScreen from './bio';
 
 const TopTabs = createMaterialTopTabNavigator();
 const Stack = createStackNavigator();
@@ -34,13 +37,33 @@ export default function ProfileTopTabsLayout() {
         )}
       </Stack.Screen>
 
-      {/* Borough Screen */}
       <Stack.Screen
         name="Borough"
         component={BoroughScreen}
         options={{
           title: 'Select Borough',
           headerBackTitle: 'Done',
+        }}
+      /><Stack.Screen
+        name="Gender"
+        component={GenderScreen}
+        options={{
+          title: 'Change Gender',
+          headerBackTitle: 'Cancel',
+        }}
+      /><Stack.Screen
+        name="Bio"
+        component={BioScreen}
+        options={{
+          title: 'Edit Bio',
+          headerBackTitle: 'Cancel',
+        }}
+      /><Stack.Screen
+        name="NewActivity"
+        component={NewActivityScreen}
+        options={{
+          title: 'Create Activity',
+          headerBackTitle: 'Cancel',
         }}
       />
     </Stack.Navigator>

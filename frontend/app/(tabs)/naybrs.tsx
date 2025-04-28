@@ -5,28 +5,38 @@ import UserProfileView from '@/components/UserProfileView';
 import { Alert, Text } from 'react-native';
 
 export default function NaybrsScreen() {
-  const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const [profile, setProfile] = useState<Profile>(emptyUser)
-  const [loading, setLoading] = useState(false)
+  const [userId, setUserId] = useState<string>('ebb97356-8167-4fd4-90e9-99bfb6d47489')
 
   useEffect(() => {
     fetchProfile()
   }, [])
 
-  const fetchProfile = async () => {
-    setLoading(true);
+  const getRandomUserId = async () => {
     try {
-      const res = await fetch(Urls.getProfile + 'ebb97356-8167-4fd4-90e9-99bfb6d47489')
+      let data = userId
+      while (data === userId) {
+        const res = await fetch(Urls.randomUser)
+        data = JSON.parse(await res.text())
+      }
+      setUserId(data)
+    } catch (err) {
+      console.log(`Error: ${err}`)
+    }
+  }
+
+  const fetchProfile = async () => {
+    try {
+      await getRandomUserId()
+      const res = await fetch(Urls.getProfile + userId)
       const data: Profile = await res.json()
       setProfile(data)
     } catch (err) {
-      setErrorMessage(`Error: ${err}`)
-    } finally {
-      setLoading(false)
+      console.log(`Error: ${err}`)
     }
   };
 
-  return <UserProfileView user={profile} likable={true}/>
+  return <UserProfileView user={profile} likable={true} fetchFunction={fetchProfile}/>
 }
 
 

@@ -20,7 +20,7 @@ export type EditProfile = {
 }
 
 export type Activity = {
-    id: string
+    id?: string
     userID: string
     title: string
     photoURL: string

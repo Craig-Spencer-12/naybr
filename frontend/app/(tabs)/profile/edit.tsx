@@ -17,17 +17,16 @@ import { useNavigation } from '@react-navigation/native';
 
 export default function ProfileScreen() {
 
-  const navigation = useNavigation(); // Hook to navigate
+  const navigation = useNavigation()
 
-  // Function to navigate to the BoroughSelectionScreen
-  const handleNavigateToBorough = () => {
-    navigation.navigate('Borough');
-  };
+  const handleNavigate = (location: string) => {
+    navigation.navigate(location);
+  }
 
   const currentUser: EditProfile = {
     firstName: 'Craig',
     lastName: 'Spencer',
-    profilePhotoURL: 'test3.png',
+    profilePhotoURL: '40AA09DF-6852-4FD1-9663-AB72FD5B6762.jpg',
     dob: '02/16/2000',
     gender: 'M',
     borough: 'Brooklyn',
@@ -36,13 +35,17 @@ export default function ProfileScreen() {
       {
         title: 'Robot Maker',
         photoURL: '3.png',
+        id: '',
+        userID: ''
       },
       {
         title: 'Surfer',
         photoURL: 'example.png',
+        id: '',
+        userID: ''
       }
     ]
-  };
+  }
   const scrollRef = useAnimatedRef<Animated.ScrollView>();
   const bottom = useBottomTabOverflow();
 
@@ -59,7 +62,9 @@ export default function ProfileScreen() {
           scrollEventThrottle={16}
           scrollIndicatorInsets={{ bottom }}
           contentContainerStyle={{ paddingBottom: bottom }}>
-          <UploadImageButton defaultUri='test123.jpeg' />
+          <View style={styles.profileImageContainer}>
+            <UploadImageButton defaultUri={currentUser.profilePhotoURL} />
+          </View>
           <ThemedView style={styles.content}>
             <ThemedText type="title">{currentUser.firstName} {currentUser.lastName}</ThemedText>
           </ThemedView>
@@ -69,8 +74,20 @@ export default function ProfileScreen() {
             <EditableText initialValue="Male" onSave={(val) => console.log('Saved:', val)} />
             <EditableText initialValue="This is the bio" onSave={(val) => console.log('Saved:', val)} />
 
-            <TouchableOpacity onPress={handleNavigateToBorough}>
-              <Text style={{ color: 'blue', marginTop: 20 }}>Change Borough</Text>
+            <TouchableOpacity onPress={() => handleNavigate('Borough')}>
+              <Text style={{ color: 'white', marginTop: 20 }}>Change Borough</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={() => handleNavigate('Gender')}>
+              <Text style={{ color: 'white', marginTop: 20 }}>Change Gendre</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={() => handleNavigate('Bio')}>
+              <Text style={{ color: 'white', marginTop: 20 }}>Change Bio</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={() => handleNavigate('NewActivity')}>
+              <Text style={{ color: 'white', marginTop: 20 }}>Create New Activity</Text>
             </TouchableOpacity>
 
           </ThemedView>
@@ -104,6 +121,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
+    marginBottom: 20,
   },
   content: {
     flex: 1,
@@ -111,4 +129,9 @@ const styles = StyleSheet.create({
     gap: 16,
     overflow: 'hidden',
   },
+  profileImageContainer: {
+    height: 200
+  }
 });
+
+

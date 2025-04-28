@@ -18,10 +18,8 @@ async function sendLike(activity: Activity) {
   let like: Like = {
     likerId: currentUser.id,
     likedId: activity.userID,
-    activityId: activity.id
+    activityId: activity.id!
   }
-
-  Alert.alert("this", activity.userID)
 
   try {
     fetch('http://192.168.1.209:8080/like', {
@@ -45,13 +43,11 @@ async function notLike() { // TODO fix this function
 
 type Props = {
   user: Profile
-  likable: boolean;
+  likable: boolean
+  fetchFunction?: () => void
 };
 
-
-
-
-export default function UserProfileView({ user, likable }: Props) {
+export default function UserProfileView({ user, likable, fetchFunction}: Props) {
 
   return (
     <View style={{ flex: 1 }}>
@@ -67,7 +63,8 @@ export default function UserProfileView({ user, likable }: Props) {
         <ThemedText>{user!.bio}</ThemedText>
 
         <View style={styles.container}>
-          {user!.activities.map((activity, index) => (
+          
+          {user.activities && (user!.activities.map((activity, index) => (
             <View key={index} style={styles.activityContainer}>
               <ActivityCard
                 key={index}
@@ -76,7 +73,7 @@ export default function UserProfileView({ user, likable }: Props) {
               />
               {likable && (
                 <View style={styles.likeContainer}>
-                  <TouchableOpacity onPress={() => sendLike(activity)}>
+                  <TouchableOpacity onPress={() => {sendLike(activity);fetchFunction && fetchFunction()}}>
                     <View style={styles.circle}>
                       <IconSymbol size={40} name="heart.fill" color={'#ffffff'} />
                     </View>
@@ -85,13 +82,13 @@ export default function UserProfileView({ user, likable }: Props) {
               )}
 
             </View>
-          ))}
+          )))}
         </View>
       </ParallaxScrollView>
 
       {likable && (
         <View style={styles.notLikeContainer}>
-          <TouchableOpacity onPress={notLike}>
+          <TouchableOpacity onPress={fetchFunction}>
             <View style={styles.notLikeCircle}>
               <IconSymbol size={40} name="xmark" color={'#ffffff'} />
             </View>

@@ -4,10 +4,12 @@ import * as ImagePicker from 'expo-image-picker'
 
 type Props = {
   defaultUri: string
+  setFunction?: React.Dispatch<React.SetStateAction<string>>
 }
 
 export default function UploadImageButton({
     defaultUri,
+    setFunction,
   }: Props) {
     const [imageUri, setImageUri] = useState<string | null>(defaultUri)
 
@@ -43,6 +45,9 @@ export default function UploadImageButton({
 
             if (response.ok) {
                 setImageUri(fileName)
+                if (setFunction) {
+                    setFunction(fileName)
+                }
             }
 
             return response.ok
@@ -56,10 +61,10 @@ export default function UploadImageButton({
     return (
         <View style={styles.container}>
             <TouchableOpacity onPress={pickImage} style={styles.buttonContainer}>
-                {imageUri ? (
-                    <Image source={{ uri: "http://192.168.1.209:8080/image/"+imageUri }} style={styles.buttonImage} />
-                ) : (
+                {!imageUri || imageUri === "" ? (
                     <Image source={require('../assets/images/icon.png')} style={styles.buttonImage} />
+                ) : (
+                    <Image source={{ uri: "http://192.168.1.209:8080/image/"+imageUri }} style={styles.buttonImage} />
                 )}
             </TouchableOpacity>
         </View>
@@ -74,7 +79,7 @@ const styles = StyleSheet.create({
     },
     buttonContainer: {
         width: 400,
-        height: 200,
+        height: 400,
         // borderRadius: 100,
         overflow: 'hidden',
         borderWidth: 2,
