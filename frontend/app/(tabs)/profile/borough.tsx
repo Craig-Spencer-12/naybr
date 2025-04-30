@@ -1,20 +1,30 @@
 import SelectableList from "@/components/SelectableList";
 import { StyleSheet, Text, View } from "react-native";
 
+async function changeBorough(val: string) {
+    await fetch("http://192.168.1.209:8080/user", {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({"borough": val}),
+      })
+}
+
 export default function BoroughScreen() {
     return (
         <View style={styles.stepContainer}>
 
             <SelectableList
                 options={[
-                    { label: 'Manhattan', value: 'manhattan' },
-                    { label: 'Brooklyn', value: 'brooklyn' },
-                    { label: 'Queens', value: 'queens' },
-                    { label: 'Bronx', value: 'bronx' },
-                    { label: 'Staten Island', value: 'statenIsland' },
+                    { label: 'Manhattan', value: 'Manhattan' },
+                    { label: 'Brooklyn', value: 'Brooklyn' },
+                    { label: 'Queens', value: 'Queens' },
+                    { label: 'Bronx', value: 'Bronx' },
+                    { label: 'Staten Island', value: 'Staten Island' },
                 ]}
                 selectedValue="brooklyn"
-                onSelect={(val) => console.log('Selected:', val)}
+                onSelect={(val) => changeBorough(val)}
             />
 
         </View>

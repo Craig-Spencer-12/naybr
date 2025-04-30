@@ -62,7 +62,7 @@ export default function UploadImageButton({
         <View style={styles.container}>
             <TouchableOpacity onPress={pickImage} style={styles.buttonContainer}>
                 {!imageUri || imageUri === "" ? (
-                    <Image source={require('../assets/images/icon.png')} style={styles.buttonImage} />
+                    <Image source={require('../assets/images/addImage.png')} style={styles.buttonImage} />
                 ) : (
                     <Image source={{ uri: "http://192.168.1.209:8080/image/"+imageUri }} style={styles.buttonImage} />
                 )}

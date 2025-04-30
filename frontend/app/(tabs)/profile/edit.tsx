@@ -1,4 +1,4 @@
-import { EditProfile } from '@/types/Profile';
+import { EditProfile, Profile } from '@/types/Profile';
 import { StyleSheet, View, Text, KeyboardAvoidingView, Button, TouchableOpacity } from 'react-native'
 
 import { Image, Platform } from 'react-native';
@@ -14,38 +14,64 @@ import UploadImageButton from '@/components/UploadImage';
 import EditableText from '@/components/EditableText';
 
 import { useNavigation } from '@react-navigation/native';
+import { Urls } from '@/constants/Urls';
+import { useEffect, useState } from 'react';
 
 export default function ProfileScreen() {
+
+  const [imageUri, setImageUri] = useState<string>("test3.png")
+  const [profile, setProfile] = useState<Profile>(emptyUser)
 
   const navigation = useNavigation()
 
   const handleNavigate = (location: string) => {
-    navigation.navigate(location);
+    navigation.navigate(location as never);
   }
 
-  const currentUser: EditProfile = {
-    firstName: 'Craig',
-    lastName: 'Spencer',
-    profilePhotoURL: '40AA09DF-6852-4FD1-9663-AB72FD5B6762.jpg',
-    dob: '02/16/2000',
-    gender: 'M',
-    borough: 'Brooklyn',
-    bio: 'I\'m the best coder ever!',
-    activities: [
-      {
-        title: 'Robot Maker',
-        photoURL: '3.png',
-        id: '',
-        userID: ''
-      },
-      {
-        title: 'Surfer',
-        photoURL: 'example.png',
-        id: '',
-        userID: ''
-      }
-    ]
+  useEffect(() => {
+    fetchProfile()
+  }, [])
+
+  var currentUser = {
+    id: '3f07b805-d67c-4b8b-b214-bc72ca75ed78'
   }
+
+  const fetchProfile = async () => {
+    try {
+      const res = await fetch(Urls.getProfile + currentUser.id)
+      const data: Profile = await res.json()
+      setProfile(data)
+      setImageUri(data.profilePhotoURL)
+    } catch (err) {
+      console.log(`Error: ${err}`)
+    }
+  };
+
+
+
+  // const currentUser: EditProfile = {
+  //   firstName: 'Craig',
+  //   lastName: 'Spencer',
+  //   profilePhotoURL: '40AA09DF-6852-4FD1-9663-AB72FD5B6762.jpg',
+  //   dob: '02/16/2000',
+  //   gender: 'M',
+  //   borough: 'Brooklyn',
+  //   bio: 'I\'m the best coder ever!',
+  //   activities: [
+  //     {
+  //       title: 'Robot Maker',
+  //       photoURL: '3.png',
+  //       id: '',
+  //       userID: ''
+  //     },
+  //     {
+  //       title: 'Surfer',
+  //       photoURL: 'example.png',
+  //       id: '',
+  //       userID: ''
+  //     }
+  //   ]
+  // }
   const scrollRef = useAnimatedRef<Animated.ScrollView>();
   const bottom = useBottomTabOverflow();
 
@@ -63,31 +89,31 @@ export default function ProfileScreen() {
           scrollIndicatorInsets={{ bottom }}
           contentContainerStyle={{ paddingBottom: bottom }}>
           <View style={styles.profileImageContainer}>
-            <UploadImageButton defaultUri={currentUser.profilePhotoURL} />
+            <UploadImageButton defaultUri={imageUri}/>
           </View>
           <ThemedView style={styles.content}>
-            <ThemedText type="title">{currentUser.firstName} {currentUser.lastName}</ThemedText>
+            <ThemedText type="title">{profile.firstName}</ThemedText>
           </ThemedView>
           <ThemedView style={styles.content}>
 
-            <EditableText initialValue="user@example.com" onSave={(val) => console.log('Saved:', val)} />
+            {/* <EditableText initialValue="user@example.com" onSave={(val) => console.log('Saved:', val)} />
             <EditableText initialValue="Male" onSave={(val) => console.log('Saved:', val)} />
-            <EditableText initialValue="This is the bio" onSave={(val) => console.log('Saved:', val)} />
+            <EditableText initialValue="This is the bio" onSave={(val) => console.log('Saved:', val)} /> */}
 
             <TouchableOpacity onPress={() => handleNavigate('Borough')}>
-              <Text style={{ color: 'white', marginTop: 20 }}>Change Borough</Text>
+              <Text style={styles.thisText}>Change Borough</Text>
             </TouchableOpacity>
 
             <TouchableOpacity onPress={() => handleNavigate('Gender')}>
-              <Text style={{ color: 'white', marginTop: 20 }}>Change Gendre</Text>
+              <Text style={styles.thisText}>Change Gender</Text>
             </TouchableOpacity>
 
             <TouchableOpacity onPress={() => handleNavigate('Bio')}>
-              <Text style={{ color: 'white', marginTop: 20 }}>Change Bio</Text>
+              <Text style={styles.thisText}>Change Bio</Text>
             </TouchableOpacity>
 
             <TouchableOpacity onPress={() => handleNavigate('NewActivity')}>
-              <Text style={{ color: 'white', marginTop: 20 }}>Create New Activity</Text>
+              <Text style={styles.thisText}>Create New Activity</Text>
             </TouchableOpacity>
 
           </ThemedView>
@@ -131,7 +157,33 @@ const styles = StyleSheet.create({
   },
   profileImageContainer: {
     height: 200
+  },
+  thisText: {
+    color: 'white',
+    marginTop: 20
   }
 });
 
 
+const emptyUser: Profile = {
+  firstName: 'EmptyUser',
+  profilePhotoURL: 'test3.png',
+  age: 0,
+  gender: 'F',
+  borough: 'Queens',
+  bio: 'The user should never see this',
+  activities: [
+    {
+      title: 'Robot Making',
+      photoURL: '3.png',
+      id: '',
+      userID: ''
+    },
+    {
+      title: 'Surfing',
+      photoURL: 'example.png',
+      id: '',
+      userID: ''
+    }
+  ]
+};
