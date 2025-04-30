@@ -19,6 +19,8 @@ func InitDatabase() {
 	// dbName := os.Getenv("DB_NAME")
 
 	dbHost := "db"
+	// dbHost := "localhost"
+
 	dbPort := "5432"
 	dbUser := "user"
 	dbPassword := "password"
@@ -107,7 +109,7 @@ func CreateUserQuery(user models.User) error {
 func UpdateUserQuery(userId string, updates map[string]string) error {
 
 	for key, value := range updates {
-		query := fmt.Sprintf("UPDATE users SET '%s'='%s' WHERE id=$1", key, value)
+		query := fmt.Sprintf("UPDATE users SET %s='%s' WHERE id=$1", key, value)
 		_, err := db.Query(query, userId)
 
 		if err != nil {
