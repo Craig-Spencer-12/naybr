@@ -104,6 +104,22 @@ func CreateUserQuery(user models.User) error {
 	return nil
 }
 
+func UpdateUserQuery(userId string, updates map[string]string) error {
+
+	for key, value := range updates {
+		query := fmt.Sprintf("UPDATE users SET '%s'='%s' WHERE id=$1", key, value)
+		_, err := db.Query(query, userId)
+
+		if err != nil {
+			return err
+		} else {
+			log.Printf("Updated %s to be %s", key, value)
+		}
+	}
+
+	return nil
+}
+
 func GetRandomUserIdQuery() (string, error) {
 
 	var id string

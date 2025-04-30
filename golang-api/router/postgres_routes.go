@@ -56,6 +56,23 @@ func CreateUser(c *gin.Context) {
 	c.IndentedJSON(http.StatusCreated, newUser)
 }
 
+func UpdateUser(c *gin.Context) {
+	id := c.Param("id")
+	var updatedUser map[string]string
+
+	if err := c.BindJSON(&updatedUser); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to bind json to object"})
+		return
+	}
+
+	if err := database.UpdateUserQuery(id, updatedUser); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update user"})
+		return
+	}
+
+	c.IndentedJSON(http.StatusCreated, updatedUser)
+}
+
 func GetViewableProfile(c *gin.Context) {
 	id := c.Param("id")
 	profile, err := database.GetViewableProfileQuery(id)

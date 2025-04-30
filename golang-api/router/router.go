@@ -17,5 +17,7 @@ func RunRouter() {
 
 	engine.POST("/like", SendLike)
 
+	engine.PUT("/user/:id", UpdateUser)
+
 	engine.Run(":8080")
 }
