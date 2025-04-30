@@ -8,15 +8,11 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import ActivityCard from '@/components/ActivityCard';
 import { IconSymbol } from './ui/IconSymbol';
+import { useSession } from '@/context/Provider';
 
-
-var currentUser = {
-  id: '3f07b805-d67c-4b8b-b214-bc72ca75ed78'
-}
-
-async function sendLike(activity: Activity) {
+async function sendLike(likerId: string, activity: Activity) {
   let like: Like = {
-    likerId: currentUser.id,
+    likerId: likerId,
     likedId: activity.userID,
     activityId: activity.id!
   }
@@ -43,11 +39,11 @@ async function notLike() { // TODO fix this function
 
 type Props = {
   user: Profile
-  likable: boolean
+  likerId: string | null
   fetchFunction?: () => void
 };
 
-export default function UserProfileView({ user, likable, fetchFunction}: Props) {
+export default function UserProfileView({ user, likerId, fetchFunction}: Props) {
 
   return (
     <View style={{ flex: 1 }}>
@@ -71,9 +67,9 @@ export default function UserProfileView({ user, likable, fetchFunction}: Props) 
                 title={activity.title}
                 photoURL={Urls.minio + activity.photoURL}
               />
-              {likable && (
+              {likerId && (
                 <View style={styles.likeContainer}>
-                  <TouchableOpacity onPress={() => {sendLike(activity);fetchFunction && fetchFunction()}}>
+                  <TouchableOpacity onPress={() => {sendLike(likerId, activity);fetchFunction && fetchFunction()}}>
                     <View style={styles.circle}>
                       <IconSymbol size={40} name="heart.fill" color={'#ffffff'} />
                     </View>
@@ -86,7 +82,7 @@ export default function UserProfileView({ user, likable, fetchFunction}: Props) 
         </View>
       </ParallaxScrollView>
 
-      {likable && (
+      {likerId && (
         <View style={styles.notLikeContainer}>
           <TouchableOpacity onPress={fetchFunction}>
             <View style={styles.notLikeCircle}>

@@ -8,6 +8,11 @@ export type Profile = {
     profilePhotoURL: string,
 }
 
+export type Session = {
+    id: string,
+    user: Profile
+}
+
 export type EditProfile = {
     firstName: string,
     lastName: string,

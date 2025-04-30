@@ -14,13 +14,11 @@ import UploadImageButton from '@/components/UploadImage';
 import EditableText from '@/components/EditableText';
 
 import { useNavigation } from '@react-navigation/native';
-import { Urls } from '@/constants/Urls';
-import { useEffect, useState } from 'react';
+import { useSession } from '@/context/Provider';
 
 export default function ProfileScreen() {
 
-  const [imageUri, setImageUri] = useState<string>("test3.png")
-  const [profile, setProfile] = useState<Profile>(emptyUser)
+  const { session, setSession } = useSession();
 
   const navigation = useNavigation()
 
@@ -28,50 +26,6 @@ export default function ProfileScreen() {
     navigation.navigate(location as never);
   }
 
-  useEffect(() => {
-    fetchProfile()
-  }, [])
-
-  var currentUser = {
-    id: '3f07b805-d67c-4b8b-b214-bc72ca75ed78'
-  }
-
-  const fetchProfile = async () => {
-    try {
-      const res = await fetch(Urls.getProfile + currentUser.id)
-      const data: Profile = await res.json()
-      setProfile(data)
-      setImageUri(data.profilePhotoURL)
-    } catch (err) {
-      console.log(`Error: ${err}`)
-    }
-  };
-
-
-
-  // const currentUser: EditProfile = {
-  //   firstName: 'Craig',
-  //   lastName: 'Spencer',
-  //   profilePhotoURL: '40AA09DF-6852-4FD1-9663-AB72FD5B6762.jpg',
-  //   dob: '02/16/2000',
-  //   gender: 'M',
-  //   borough: 'Brooklyn',
-  //   bio: 'I\'m the best coder ever!',
-  //   activities: [
-  //     {
-  //       title: 'Robot Maker',
-  //       photoURL: '3.png',
-  //       id: '',
-  //       userID: ''
-  //     },
-  //     {
-  //       title: 'Surfer',
-  //       photoURL: 'example.png',
-  //       id: '',
-  //       userID: ''
-  //     }
-  //   ]
-  // }
   const scrollRef = useAnimatedRef<Animated.ScrollView>();
   const bottom = useBottomTabOverflow();
 
@@ -89,10 +43,10 @@ export default function ProfileScreen() {
           scrollIndicatorInsets={{ bottom }}
           contentContainerStyle={{ paddingBottom: bottom }}>
           <View style={styles.profileImageContainer}>
-            <UploadImageButton defaultUri={imageUri}/>
+            <UploadImageButton defaultUri={session.user.profilePhotoURL}/>
           </View>
           <ThemedView style={styles.content}>
-            <ThemedText type="title">{profile.firstName}</ThemedText>
+            <ThemedText type="title">{session.user.firstName}</ThemedText>
           </ThemedView>
           <ThemedView style={styles.content}>
 
