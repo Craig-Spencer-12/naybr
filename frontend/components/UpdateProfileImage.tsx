@@ -21,17 +21,19 @@ export default function UpdateProfileImage() {
     }
 
     const uploadImage = async (uri: string): Promise<boolean> => {
-        const fileName = uri.split('/').pop() ?? 'upload.jpg'
-        const match = /\.(\w+)$/.exec(fileName)
-        const type = match ? `${match[1]}` : `image`
+        // TODO ensure all image types work
+        // const fileName = uri.split('/').pop() ?? 'upload.jpg'
+        // const match = /\.(\w+)$/.exec(fileName)
+        // const type = match ? `${match[1]}` : `image`
 
-        const fileName2 = session.id + "_profile-photo." + type
+        const fileName = session.id + "_profile-photo.jpg"
 
         const formData = new FormData()
         formData.append('image', {
             uri: uri,
-            name: fileName2,
-            type: `image/${type}`,
+            name: fileName,
+            // type: `image/${type}`,
+            type: `image/jpeg`
         } as any)
 
         try {
@@ -45,7 +47,7 @@ export default function UpdateProfileImage() {
                     ...prev,
                     user: {
                         ...prev.user,
-                        profilePhotoURL: fileName2+`?t=${Date.now()}`
+                        profilePhotoURL: fileName+`?t=${Date.now()}`
                     }
                 }))
             }

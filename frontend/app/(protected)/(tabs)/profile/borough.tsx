@@ -1,17 +1,33 @@
 import SelectableList from "@/components/SelectableList";
-import { StyleSheet, Text, View } from "react-native";
-
-async function changeBorough(val: string) {
-    await fetch("http://192.168.1.209:8080/user", {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({"borough": val}),
-      })
-}
+import { Urls } from "@/constants/Urls";
+import { useSession } from "@/utils/authContext";
+import { Alert, StyleSheet, View } from "react-native";
 
 export default function BoroughScreen() {
+    const { session, setSession } = useSession()
+
+    async function changeBorough(val: string) {
+        const response = await fetch(Urls.postProfile + session.id, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({"borough": val}),
+          })
+    
+        if (response.ok) {
+            setSession(prev => ({
+                ...prev,
+                user: {
+                    ...prev.user,
+                    borough: val
+                }
+            }))
+        } else {
+            Alert.alert("Error", "Failed to set borough")
+        }
+    }
+
     return (
         <View style={styles.stepContainer}>
 
@@ -23,7 +39,7 @@ export default function BoroughScreen() {
                     { label: 'Bronx', value: 'Bronx' },
                     { label: 'Staten Island', value: 'Staten Island' },
                 ]}
-                selectedValue="brooklyn"
+                selectedValue={session.user.borough}
                 onSelect={(val) => changeBorough(val)}
             />
 

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Urls } from '@/constants/Urls';
 import { Profile } from '@/types/Profile'
 import UserProfileView from '@/components/UserProfileView';
-import { useSession } from '@/utils/authContext';
 
 export default function NaybrsScreen() {
   const [profile, setProfile] = useState<Profile>(emptyUser)

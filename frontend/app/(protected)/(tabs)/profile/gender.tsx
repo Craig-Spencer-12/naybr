@@ -1,15 +1,45 @@
-import EditableText from "@/components/EditableText";
 import SelectableList from "@/components/SelectableList";
-import UploadImageButton from "@/components/UploadImage";
-import { StyleSheet, Text, View } from "react-native";
-
+import { Urls } from "@/constants/Urls";
+import { useSession } from "@/utils/authContext";
+import { Alert, StyleSheet, View } from "react-native";
 export default function GenderScreen() {
+    const { session, setSession } = useSession()
+
+    async function changeGender(val: string) {
+        const response = await fetch(Urls.postProfile + session.id, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({"gender": val}),
+          })
+    
+        if (response.ok) {
+            setSession(prev => ({
+                ...prev,
+                user: {
+                    ...prev.user,
+                    gender: val
+                }
+            }))
+        } else {
+            Alert.alert("Error", "Failed to set gender")
+        }
+    }
+
     return (
         <View style={styles.stepContainer}>
 
-            <EditableText initialValue="Activity Title" onSave={(val) => console.log('Saved:', val)} />
-
-            <UploadImageButton defaultUri={"../../../assets/images/icon.png"} />
+            <SelectableList
+                options={[
+                    { label: 'Male', value: 'M' },
+                    { label: 'Female', value: 'F' },
+                    { label: 'Non-Binary', value: 'N' },
+                    { label: 'Other', value: 'O' },
+                ]}
+                selectedValue={session.user.gender}
+                onSelect={(val) => changeGender(val)}
+            />
 
         </View>
     );

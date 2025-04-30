@@ -23,7 +23,6 @@ export default function ProfileTopTabsLayout() {
   return (
 
     <Stack.Navigator>
-      {/* Tab Navigator */}
       <Stack.Screen name="MainTabs" options={{ headerShown: false }}>
         {() => (
           <TopTabs.Navigator
@@ -36,7 +35,6 @@ export default function ProfileTopTabsLayout() {
           </TopTabs.Navigator>
         )}
       </Stack.Screen>
-
       <Stack.Screen
         name="Borough"
         component={BoroughScreen}
@@ -49,37 +47,23 @@ export default function ProfileTopTabsLayout() {
         component={GenderScreen}
         options={{
           title: 'Change Gender',
-          headerBackTitle: 'Cancel',
+          headerBackTitle: 'Done',
         }}
       /><Stack.Screen
         name="Bio"
         component={BioScreen}
         options={{
           title: 'Edit Bio',
-          headerBackTitle: 'Cancel',
+          headerBackTitle: 'Done',
         }}
       /><Stack.Screen
         name="NewActivity"
         component={NewActivityScreen}
         options={{
           title: 'Create Activity',
-          headerBackTitle: 'Cancel',
+          headerBackTitle: 'Done',
         }}
       />
     </Stack.Navigator>
-
-
-
-
-    // <TopTabs.Navigator
-    //   screenOptions={{
-    //     tabBarStyle: { paddingTop: insets.top },
-    //     tabBarIndicatorStyle: { backgroundColor: 'white' },
-    //   }}>
-    //   <TopTabs.Screen name="Edit" component={EditScreen} />
-    //   <TopTabs.Screen name="View" component={ViewScreen} />
-    //   <TopTabs.Screen name="Borough" component={BoroughScreen} />
-
-    // </TopTabs.Navigator>
   );
 }
