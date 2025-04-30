@@ -2,13 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { Urls } from '@/constants/Urls';
 import { Profile } from '@/types/Profile'
 import UserProfileView from '@/components/UserProfileView';
-import { useSession } from '@/context/Provider';
+import { useSession } from '@/utils/authContext';
 
 export default function NaybrsScreen() {
   const [profile, setProfile] = useState<Profile>(emptyUser)
   const [userId, setUserId] = useState<string>('ebb97356-8167-4fd4-90e9-99bfb6d47489')
-
-  const { session, setSession } = useSession();
 
   useEffect(() => {
     fetchProfile()
@@ -38,7 +36,7 @@ export default function NaybrsScreen() {
     }
   };
 
-  return <UserProfileView user={profile} likerId={session.id} fetchFunction={fetchProfile}/>
+  return <UserProfileView user={profile} likable={true} fetchFunction={fetchProfile}/>
 }
 
 

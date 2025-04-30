@@ -14,11 +14,12 @@ import UploadImageButton from '@/components/UploadImage';
 import EditableText from '@/components/EditableText';
 
 import { useNavigation } from '@react-navigation/native';
-import { useSession } from '@/context/Provider';
+import { useSession } from '@/utils/authContext';
+import UpdateProfileImage from '@/components/UpdateProfileImage';
 
 export default function ProfileScreen() {
 
-  const { session, setSession } = useSession();
+  const { session, logOut } = useSession();
 
   const navigation = useNavigation()
 
@@ -43,7 +44,7 @@ export default function ProfileScreen() {
           scrollIndicatorInsets={{ bottom }}
           contentContainerStyle={{ paddingBottom: bottom }}>
           <View style={styles.profileImageContainer}>
-            <UploadImageButton defaultUri={session.user.profilePhotoURL}/>
+            <UpdateProfileImage />
           </View>
           <ThemedView style={styles.content}>
             <ThemedText type="title">{session.user.firstName}</ThemedText>
@@ -69,6 +70,8 @@ export default function ProfileScreen() {
             <TouchableOpacity onPress={() => handleNavigate('NewActivity')}>
               <Text style={styles.thisText}>Create New Activity</Text>
             </TouchableOpacity>
+
+            <Button title="Logout" onPress={logOut}></Button>
 
           </ThemedView>
         </Animated.ScrollView>

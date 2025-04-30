@@ -8,7 +8,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import ActivityCard from '@/components/ActivityCard';
 import { IconSymbol } from './ui/IconSymbol';
-import { useSession } from '@/context/Provider';
+import { useSession } from '@/utils/authContext';
 
 async function sendLike(likerId: string, activity: Activity) {
   let like: Like = {
@@ -39,11 +39,13 @@ async function notLike() { // TODO fix this function
 
 type Props = {
   user: Profile
-  likerId: string | null
+  likable: boolean
   fetchFunction?: () => void
 };
 
-export default function UserProfileView({ user, likerId, fetchFunction}: Props) {
+export default function UserProfileView({ user, likable, fetchFunction}: Props) {
+
+  const {session} = useSession()
 
   return (
     <View style={{ flex: 1 }}>
@@ -67,9 +69,9 @@ export default function UserProfileView({ user, likerId, fetchFunction}: Props) 
                 title={activity.title}
                 photoURL={Urls.minio + activity.photoURL}
               />
-              {likerId && (
+              {likable && (
                 <View style={styles.likeContainer}>
-                  <TouchableOpacity onPress={() => {sendLike(likerId, activity);fetchFunction && fetchFunction()}}>
+                  <TouchableOpacity onPress={() => {sendLike(session.id, activity);fetchFunction && fetchFunction()}}>
                     <View style={styles.circle}>
                       <IconSymbol size={40} name="heart.fill" color={'#ffffff'} />
                     </View>
@@ -82,7 +84,7 @@ export default function UserProfileView({ user, likerId, fetchFunction}: Props) 
         </View>
       </ParallaxScrollView>
 
-      {likerId && (
+      {likable && (
         <View style={styles.notLikeContainer}>
           <TouchableOpacity onPress={fetchFunction}>
             <View style={styles.notLikeCircle}>
