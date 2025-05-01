@@ -23,8 +23,9 @@ export default function ProfileTopTabsLayout() {
         name="ViewLike"
         component={ViewLikeScreen}
         options={{
-          title: 'Change Gender',
-          headerBackTitle: 'Done',
+          title: 'View Like',
+          // headerShown: false,
+          // headerTitleStyle: false,
         }}
       />
     </Stack.Navigator>

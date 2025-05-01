@@ -1,13 +1,15 @@
 import UserProfileView from '@/components/UserProfileView';
 import { useSession } from '@/utils/authContext';
 import React, { useEffect, useState } from 'react';
-import { useRoute } from '@react-navigation/native';
+import { RouteProp, useRoute } from '@react-navigation/native';
 import { fetchProfile } from '@/api/fetchClient';
 import { Profile } from '@/types/Profile';
 import { EmptyUser } from '@/constants/Empty';
+import { RootStackParamList } from '@/types/types';
 
 export default function ViewLikeScreen() {
-  const route = useRoute()
+  type ViewLikeRouteProp = RouteProp<RootStackParamList, 'ViewLike'>;
+  const route = useRoute<ViewLikeRouteProp>()
   const { userId } = route.params
 
   const [data, setData] = useState<Profile>(EmptyUser);
