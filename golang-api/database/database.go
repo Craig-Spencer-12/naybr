@@ -203,6 +203,35 @@ func CreateActivityQuery(activity models.Activity) error {
 	return nil
 }
 
+func GetViewableLikeListQuery(id string) (models.ViewableLikeList, error) {
+	var result models.ViewableLikeList
+
+	query := `SELECT users.id, users.first_name
+		FROM likes
+		JOIN users ON likes.liker_id = users.id
+		WHERE likes.liked_id = $1;
+	`
+	rows, err := db.Query(query, id)
+	if err != nil {
+		return result, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var like models.ViewableLike
+		if err := rows.Scan(&like.UserID, &like.FirstName); err != nil {
+			return result, err
+		}
+		result.Likes = append(result.Likes, like)
+	}
+
+	if err := rows.Err(); err != nil {
+		return result, err
+	}
+
+	return result, nil
+}
+
 func SendLikeQuery(like models.Like) error {
 
 	log.Printf("%s %s %s", like.LikerID, like.LikedID, like.ActivityID)
@@ -216,34 +245,3 @@ func SendLikeQuery(like models.Like) error {
 
 	return nil
 }
-
-// func ChangeBookQuantityQuery(id string, n int) error {
-// 	book, err := GetBookQuery(id)
-// 	if err != nil {
-// 		log.Println("Database query error:", err)
-// 		return err
-// 	}
-
-// 	if n < 0 && book.Quantity < -n {
-// 		return errors.New("Not enough copies of this book to fulfill request")
-// 	}
-
-// 	query := `UPDATE books SET quantity = quantity + $1 WHERE id = $2`
-// 	res, err := db.Exec(query, n, id)
-// 	if err != nil {
-// 		log.Println("Error updating quantity:", err)
-// 		return err
-// 	}
-
-// 	rowsAffected, err := res.RowsAffected()
-// 	if err != nil {
-// 		log.Println("Error fetching rows affected:", err)
-// 		return err
-// 	}
-
-// 	if rowsAffected == 0 {
-// 		return errors.New("no book found with given ID")
-// 	}
-
-// 	return nil
-// }

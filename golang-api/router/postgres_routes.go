@@ -8,15 +8,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// func GetAllBooks(c *gin.Context) {
-// 	books, err := database.GetAllBooksQuery()
-// 	if err != nil {
-// 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get all books"})
-// 	}
-
-// 	c.IndentedJSON(http.StatusOK, books)
-// }
-
 func GetRandomUserId(c *gin.Context) {
 	id, err := database.GetRandomUserIdQuery()
 
@@ -117,40 +108,14 @@ func SendLike(c *gin.Context) {
 	c.IndentedJSON(http.StatusCreated, newLike)
 }
 
-// func CheckoutBook(c *gin.Context) {
-// 	id, ok := c.GetQuery("id")
+func GetLikeList(c *gin.Context) {
+	id := c.Param("id")
+	list, err := database.GetViewableLikeListQuery(id)
 
-// 	if !ok {
-// 		c.IndentedJSON(http.StatusBadRequest, gin.H{"message": "Missing id query parameter"})
-// 		return
-// 	}
+	if err != nil {
+		c.IndentedJSON(http.StatusNotFound, gin.H{"message": err.Error()})
+		return
+	}
 
-// 	err := database.ChangeBookQuantityQuery(id, -1)
-
-// 	if err != nil {
-// 		c.IndentedJSON(http.StatusBadRequest, gin.H{"message": err.Error()})
-// 		return
-// 	}
-
-// 	book, _ := database.GetBookQuery(id)
-// 	c.IndentedJSON(http.StatusOK, book)
-// }
-
-// func ReturnBook(c *gin.Context) {
-// 	id, ok := c.GetQuery("id")
-
-// 	if !ok {
-// 		c.IndentedJSON(http.StatusBadRequest, gin.H{"message": "Missing id query parameter"})
-// 		return
-// 	}
-
-// 	err := database.ChangeBookQuantityQuery(id, 1)
-
-// 	if err != nil {
-// 		c.IndentedJSON(http.StatusBadRequest, gin.H{"message": err.Error()})
-// 		return
-// 	}
-
-// 	book, _ := database.GetBookQuery(id)
-// 	c.IndentedJSON(http.StatusOK, book)
-// }
+	c.IndentedJSON(http.StatusOK, list)
+}

@@ -34,6 +34,15 @@ type Like struct {
 	ActivityID string `json:"activityId"`
 }
 
+type ViewableLike struct {
+	UserID    string `json:"userId"`
+	FirstName string `json:"firstName"`
+}
+
+type ViewableLikeList struct {
+	Likes []ViewableLike `json:"list"`
+}
+
 type ViewableProfile struct {
 	FirstName       string     `json:"firstName"`
 	Age             int        `json:"age"`
