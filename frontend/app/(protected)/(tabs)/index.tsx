@@ -1,46 +1,40 @@
-import { Image, StyleSheet, Platform } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { Urls } from '@/constants/Urls';
+import { Profile } from '@/types/Profile'
+import UserProfileView from '@/components/UserProfileView';
+import { EmptyUser } from '@/constants/Empty';
 
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
-import SelectableDropdown from '@/components/SelectableDropdown';
+export default function NaybrsScreen() {
+  const [profile, setProfile] = useState<Profile>(EmptyUser)
+  const [userId, setUserId] = useState<string>('ebb97356-8167-4fd4-90e9-99bfb6d47489')
 
-export default function HomeScreen() {
-  return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Likes</ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText>This is where you will see the others that have liked you</ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
-  );
+  useEffect(() => {
+    fetchProfile()
+  }, [])
+
+  const getRandomUserId = async () => {
+    try {
+      let data = userId
+      while (data === userId) {
+        const res = await fetch(Urls.randomUser)
+        data = JSON.parse(await res.text())
+      }
+      setUserId(data)
+    } catch (err) {
+      console.log(`Error: ${err}`)
+    }
+  }
+
+  const fetchProfile = async () => {
+    try {
+      await getRandomUserId()
+      const res = await fetch(Urls.getProfile + userId)
+      const data: Profile = await res.json()
+      setProfile(data)
+    } catch (err) {
+      console.log(`Error: ${err}`)
+    }
+  };
+
+  return <UserProfileView user={profile} likable={true} fetchFunction={fetchProfile}/>
 }
-
-const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
-});

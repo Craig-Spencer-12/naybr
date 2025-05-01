@@ -30,14 +30,14 @@ export default function TabLayout() {
           tabBarShowLabel: false,
         }}>
         <Tabs.Screen
-          name="naybrs"
+          name="index"
           options={{
             title: 'Naybrs',
             tabBarIcon: ({ color }) => <IconSymbol size={37} name="house.fill" color={color} />,
           }}
         />
         <Tabs.Screen
-          name="index"
+          name="likes"
           options={{
             title: 'Likes',
             tabBarIcon: ({ color }) => <IconSymbol size={37} name="heart.fill" color={color} />,
@@ -57,13 +57,13 @@ export default function TabLayout() {
             tabBarIcon: ({ color }) => <IconSymbol size={37} name="person.fill" color={color} />,
           }}
         />
-        <Tabs.Screen
+        {/* <Tabs.Screen
           name="signup"
           options={{
             title: 'Add User',
             tabBarIcon: ({ color }) => <IconSymbol size={37} name="hammer.fill" color={color} />,
           }}
-        />
+        /> */}
       </Tabs>
   )
 }

@@ -37,3 +37,12 @@ export type Like = {
     likedId: string
     activityId: string
 }
+
+export type ViewableLike = {
+    userId: string
+    name: string
+}
+
+export type LikeList = {
+    Likes: ViewableLike[]
+}

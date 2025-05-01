@@ -6,8 +6,6 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import EditScreen from './edit';
 import ViewScreen from './view';
 import BoroughScreen from './borough';
-import { Text, TouchableOpacity } from 'react-native';
-import { useNavigation } from 'expo-router';
 import NewActivityScreen from './newActivity';
 import GenderScreen from './gender';
 import BioScreen from './bio';
@@ -17,8 +15,6 @@ const Stack = createStackNavigator();
 
 export default function ProfileTopTabsLayout() {
   const insets = useSafeAreaInsets();
-
-  const navigation = useNavigation();
 
   return (
 

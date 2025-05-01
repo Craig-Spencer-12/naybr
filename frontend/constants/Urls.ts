@@ -6,4 +6,5 @@ export const Urls = {
   postProfile: base + "user/",
   randomUser: base + "user/random",
   postActivity: base + "activities",
+  getLikes: base + "likes/"
 }
