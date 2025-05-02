@@ -39,6 +39,8 @@ publish:
 
 
 # psql -U user -d mydb
+# \pset pager off
+
 # \dt
 # SELECT * FROM books;
 

@@ -40,7 +40,7 @@ func CreateUser(c *gin.Context) {
 	}
 
 	if err := database.CreateUserQuery(newUser); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create user"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err})
 		return
 	}
 

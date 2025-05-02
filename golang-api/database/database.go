@@ -94,10 +94,8 @@ func InitDatabase() {
 }
 
 func CreateUserQuery(user models.User) error {
-	query := `INSERT INTO users (first_name, date_of_birth, gender, borough, bio) VALUES ($1, $2, $3, $4, $5) RETURNING id`
-	// last_name, phone_number, email, password,
-	// user.LastName, user.PhoneNumber, user.Email, user.Password,
-	err := db.QueryRow(query, user.FirstName, user.DOB, user.Gender, user.Borough, user.BIO).Scan(&user.ID)
+	query := `INSERT INTO users (first_name, last_name, phone_number, email, password, date_of_birth, gender, borough, bio) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING id`
+	err := db.QueryRow(query, user.FirstName, user.LastName, user.PhoneNumber, user.Email, user.Password, user.DOB, user.Gender, user.Borough, user.BIO).Scan(&user.ID)
 	if err != nil {
 		log.Println("Database insert error:", err)
 		return err
@@ -152,8 +150,8 @@ func GetViewableProfileQuery(userId string) (models.ViewableProfile, error) {
 
 	var profile models.ViewableProfile
 	var dob string
-	query := `SELECT first_name, date_of_birth, gender, borough, bio, profile_photo_url FROM users WHERE id = $1`
-	err := db.QueryRow(query, userId).Scan(&profile.FirstName, &dob, &profile.Gender, &profile.Borough, &profile.BIO, &profile.ProfilePhotoURL)
+	query := `SELECT first_name, date_of_birth, gender, borough, bio FROM users WHERE id = $1`
+	err := db.QueryRow(query, userId).Scan(&profile.FirstName, &dob, &profile.Gender, &profile.Borough, &profile.BIO)
 
 	if err != nil {
 		return profile, err

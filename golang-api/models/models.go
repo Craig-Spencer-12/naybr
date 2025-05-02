@@ -1,6 +1,7 @@
 package models
 
 type User struct {
+	ID          string `json:"id"`
 	FirstName   string `json:"firstName"`
 	LastName    string `json:"lastName"`
 	PhoneNumber string `json:"phoneNumber"`
@@ -9,15 +10,8 @@ type User struct {
 	DOB         string `json:"dateOfBirth"`
 	Gender      string `json:"gender"`
 	Borough     string `json:"borough"`
-
-	ID              string `json:"id"`
-	BIO             string `json:"bio"`
-	ProfilePhotoURL string `json:"profilePhotoURL"`
+	BIO         string `json:"bio"`
 }
-
-// type ReturnID struct {
-// 	ID string `json:"id"`
-// }
 
 type Activity struct {
 	ID         string `json:"id"`
@@ -44,11 +38,10 @@ type ViewableLikeList struct {
 }
 
 type ViewableProfile struct {
-	FirstName       string     `json:"firstName"`
-	Age             int        `json:"age"`
-	Gender          string     `json:"gender"`
-	Borough         string     `json:"borough"`
-	Activities      []Activity `json:"activities"`
-	BIO             string     `json:"bio"`
-	ProfilePhotoURL string     `json:"profilePhotoURL"`
+	FirstName  string     `json:"firstName"`
+	Age        int        `json:"age"`
+	Gender     string     `json:"gender"`
+	Borough    string     `json:"borough"`
+	Activities []Activity `json:"activities"`
+	BIO        string     `json:"bio"`
 }
