@@ -1,21 +1,21 @@
-import EditableText from "@/components/EditableText";
-import SelectableList from "@/components/SelectableList";
 import UploadImageButton from "@/components/UploadImage";
 import { Urls } from "@/constants/Urls";
-import { useNavigation } from "expo-router";
+import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
 import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { Activity } from '@/types/Profile'
+import { useSession } from "@/utils/authContext";
 
 export default function NewActivityScreen() {
     const [text, setText] = useState('')
     const [imageUri, setImageUri] = useState('')
+    const {session, setSession} = useSession()
 
     const navigation = useNavigation();
 
     const postActivity = async () => {
         const activity: Activity = {
-            userID: '3f07b805-d67c-4b8b-b214-bc72ca75ed78',
+            userID: session.id,
             title: text,
             photoURL: imageUri
         }
@@ -30,7 +30,14 @@ export default function NewActivityScreen() {
             })
 
             if (res.ok) {
-                navigation.goBack();
+                navigation.navigate("MainTabs" as never) // TODO: make this navigate backwards (animation)
+                setSession(prev => ({
+                    ...prev,
+                    user: {
+                        ...prev.user,
+                        activities: [...(prev.user.activities ?? []), activity]
+                    }
+                }))
             } else {
                 Alert.alert("Error", "Failed to post activity")
             }

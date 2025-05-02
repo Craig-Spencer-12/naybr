@@ -1,6 +1,3 @@
-import EditableText from "@/components/EditableText";
-import SelectableList from "@/components/SelectableList";
-import UploadImageButton from "@/components/UploadImage";
 import { Urls } from "@/constants/Urls";
 import { useSession } from "@/utils/authContext";
 import { useState } from "react";

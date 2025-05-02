@@ -15,7 +15,8 @@ export async function get(url: string): Promise<any> {
 export const fetchProfile = async (id: string): Promise<Profile> => {
     try {
         const res = await fetch(Urls.getProfile + id)
-        const data: Profile = await res.json()
+        let data: Profile = await res.json()
+        data.profilePhotoURL = id + "_profile-photo.jpg"
         return data
     } catch (err) {
         console.log(`Error: ${err}`)

@@ -1,0 +1,10 @@
+{
+    "firstName" : "John",
+    "lastName" : "Smith",
+    "phoneNumber" : "222-222-3333",
+    "email" : "john.smith@gmail.com",
+    "password" : "P@ssw0rd",
+    "dateOfBirth" : "5/7/1995",
+    "gender" : "M",
+    "borough" : "Queens"
+}

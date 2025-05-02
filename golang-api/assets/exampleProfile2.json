@@ -1,10 +1,10 @@
 {
-    "firstName" : "Bob",
-    "phoneNumber" : "1112224444",
-    "email" : "b@gmail.com",
-    "password" : "12344",
-    "dateOfBirth" : "01/11/1999",
+    "firstName" : "George",
+    "lastName" : "Chan",
+    "phoneNumber" : "444-222-3333",
+    "email" : "george.chan@gmail.com",
+    "password" : "P@ssw0rd",
+    "dateOfBirth" : "4/15/1997",
     "gender" : "M",
-    "borough" : "Queens",
-    "bio" : "yuh"
+    "borough" : "Brooklyn"
 }

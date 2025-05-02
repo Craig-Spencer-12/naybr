@@ -1,0 +1,10 @@
+{
+    "firstName" : "Ava",
+    "lastName" : "Kahn",
+    "phoneNumber" : "333-222-3333",
+    "email" : "ava.kahn@gmail.com",
+    "password" : "P@ssw0rd",
+    "dateOfBirth" : "2/3/1999",
+    "gender" : "F",
+    "borough" : "Brooklyn"
+}

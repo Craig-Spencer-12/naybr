@@ -14,17 +14,6 @@ export type Session = {
     user: Profile
 }
 
-export type EditProfile = {
-    firstName: string
-    lastName: string
-    dob: string
-    gender: string
-    borough: string
-    activities: Activity[]
-    bio: string
-    profilePhotoURL: string
-}
-
 export type Activity = {
     id?: string
     userID: string

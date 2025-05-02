@@ -1,7 +1,5 @@
-import { EditProfile, Profile } from '@/types/Profile';
 import { StyleSheet, View, Text, KeyboardAvoidingView, Button, TouchableOpacity } from 'react-native'
-
-import { Image, Platform } from 'react-native';
+import { Platform } from 'react-native';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 
@@ -10,9 +8,6 @@ import Animated, {
 } from 'react-native-reanimated';
 
 import { useBottomTabOverflow } from '@/components/ui/TabBarBackground';
-import UploadImageButton from '@/components/UploadImage';
-import EditableText from '@/components/EditableText';
-
 import { useNavigation } from '@react-navigation/native';
 import { useSession } from '@/utils/authContext';
 import UpdateProfileImage from '@/components/UpdateProfileImage';
@@ -119,28 +114,4 @@ const styles = StyleSheet.create({
     color: 'white',
     marginTop: 20
   }
-});
-
-
-const emptyUser: Profile = {
-  firstName: 'EmptyUser',
-  profilePhotoURL: 'test3.png',
-  age: 0,
-  gender: 'F',
-  borough: 'Queens',
-  bio: 'The user should never see this',
-  activities: [
-    {
-      title: 'Robot Making',
-      photoURL: '3.png',
-      id: '',
-      userID: ''
-    },
-    {
-      title: 'Surfing',
-      photoURL: 'example.png',
-      id: '',
-      userID: ''
-    }
-  ]
-};
+})

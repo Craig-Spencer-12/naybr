@@ -1,4 +1,4 @@
-import { Session, Profile, EditProfile } from "@/types/Profile"
+import { Session, Profile } from "@/types/Profile"
 import { createContext, PropsWithChildren, useContext, useState } from "react"
 import { useRouter } from "expo-router"
 import { EmptySession } from "@/constants/Empty"
