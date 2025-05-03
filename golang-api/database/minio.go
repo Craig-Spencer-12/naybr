@@ -17,12 +17,9 @@ func InitMinIO() {
 	// secretKey := os.Getenv("S3_SECRET_KEY")
 
 	endpoint := "minio:9000"
+	// endpoint := "localhost:9000"
 	accessKey := "minioadmin"
 	secretKey := "minioadmin"
-
-	// log.Println("Sleeping for 5 seconds to let MinIO wake up...")
-	// time.Sleep(5 * time.Second)
-	// database.WaitForService("MinIO", "minio")
 
 	var err error
 	minioClient, err = minio.New(endpoint, &minio.Options{

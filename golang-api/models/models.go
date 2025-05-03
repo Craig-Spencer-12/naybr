@@ -44,3 +44,8 @@ type ViewableProfile struct {
 	Activities []Activity `json:"activities"`
 	BIO        string     `json:"bio"`
 }
+
+type Table struct {
+	Name  string
+	Query string
+}

@@ -5,20 +5,18 @@ import "github.com/gin-gonic/gin"
 func RunRouter() {
 	engine := gin.Default()
 
-	engine.GET("/user/random", GetRandomUserId)
-	engine.GET("/users/:name", GetUserByName)
 	engine.POST("/user", CreateUser)
-	engine.GET("/profile/:id", GetViewableProfile)
+	engine.GET("/user/:id", GetViewableProfile)
+	engine.PUT("/user/:id", UpdateUser)
+	engine.GET("/user/random", GetRandomUserId)
 
 	engine.POST("/activities", CreateActivity)
-
-	engine.POST("/image", UploadImage)
-	engine.GET("/image/:userId/:filename", GetImage)
 
 	engine.POST("/like", SendLike)
 	engine.GET("/likes/:id", GetLikeList)
 
-	engine.PUT("/user/:id", UpdateUser)
+	engine.POST("/image", UploadImage)
+	engine.GET("/image/:userId/:filename", GetImage)
 
 	engine.Run(":8080")
 }

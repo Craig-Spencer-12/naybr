@@ -19,18 +19,6 @@ func GetRandomUserId(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, id)
 }
 
-func GetUserByName(c *gin.Context) {
-	name := c.Param("name")
-	user, err := database.GetUserQuery(name)
-
-	if err != nil {
-		c.IndentedJSON(http.StatusNotFound, gin.H{"message": err.Error()})
-		return
-	}
-
-	c.IndentedJSON(http.StatusOK, user)
-}
-
 func CreateUser(c *gin.Context) {
 	var newUser models.User
 
