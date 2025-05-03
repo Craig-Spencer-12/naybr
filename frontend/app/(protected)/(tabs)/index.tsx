@@ -31,16 +31,5 @@ export default function NaybrsScreen() {
     }
   }
 
-  // const fetchProfile = async () => {
-  //   try {
-  //     await getRandomUserId()
-  //     const res = await fetch(Urls.getProfile + userId)
-  //     const data: Profile = await res.json()
-  //     setProfile(data)
-  //   } catch (err) {
-  //     console.log(`Error: ${err}`)
-  //   }
-  // };
-
   return <UserProfileView user={profile} likable={true} fetchFunction={getRandomUser}/>
 }

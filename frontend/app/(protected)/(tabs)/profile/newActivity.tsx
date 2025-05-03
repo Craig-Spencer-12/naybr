@@ -5,20 +5,27 @@ import { useState } from "react";
 import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { Activity } from '@/types/Profile'
 import { useSession } from "@/utils/authContext";
+import { uploadImage } from "@/api/fetchClient";
+import { v4 as uuidv4 } from 'uuid';
+import { EmptyActivity, EmptySession } from "@/constants/Empty";
+
 
 export default function NewActivityScreen() {
     const [text, setText] = useState('')
     const [imageUri, setImageUri] = useState('')
-    const {session, setSession} = useSession()
+    const { session, setSession } = useSession()
 
     const navigation = useNavigation();
 
-    const postActivity = async () => {
+
+    const postActivity = async (): Promise<Activity> => {
         const activity: Activity = {
+            id: "",
             userID: session.id,
             title: text,
-            photoURL: imageUri
         }
+
+        let newActivity: Activity = EmptyActivity
         // setLoading(true);
         try {
             const res = await fetch(Urls.postActivity, {
@@ -30,14 +37,7 @@ export default function NewActivityScreen() {
             })
 
             if (res.ok) {
-                navigation.navigate("MainTabs" as never) // TODO: make this navigate backwards (animation)
-                setSession(prev => ({
-                    ...prev,
-                    user: {
-                        ...prev.user,
-                        activities: [...(prev.user.activities ?? []), activity]
-                    }
-                }))
+                newActivity = await res.json()
             } else {
                 Alert.alert("Error", "Failed to post activity")
             }
@@ -46,8 +46,28 @@ export default function NewActivityScreen() {
         } finally {
             //   setLoading(false)
         }
+
+        return newActivity
     };
-                         
+
+    const submitActivity = async () => {
+        const activity = await postActivity()
+        console.log(`The Id id: ${activity.id}`)
+        const ok = await uploadImage(session.id, activity.id + ".jpg", imageUri)
+
+        if (ok && activity) {
+            setSession(prev => ({
+                ...prev,
+                user: {
+                    ...prev.user,
+                    activities: [...(prev.user.activities ?? []), activity]
+                }
+            }))
+
+            navigation.navigate("MainTabs" as never)
+        }
+    }
+
     return (
         <View style={styles.pageContainer}>
             <TextInput
@@ -60,7 +80,7 @@ export default function NewActivityScreen() {
                 <UploadImageButton defaultUri={""} setFunction={setImageUri} />
             </View>
             <View style={styles.container}>
-                <TouchableOpacity style={styles.button} onPress={postActivity}>
+                <TouchableOpacity style={styles.button} onPress={submitActivity}>
                     <Text style={styles.buttonText}>Create Activity</Text>
                 </TouchableOpacity>
             </View>

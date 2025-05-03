@@ -56,7 +56,7 @@ export default function LikesScreen() {
       renderItem={({ item }) => (
         <TouchableOpacity style={styles.card} onPress={() => handleNavigate(item.userId)}>
           <Image
-            source={{ uri: `${Urls.minio}${item.userId}_profile-photo.jpg` }}
+            source={{ uri: `${Urls.minio}${item.userId}/profile-photo.jpg` }}
             style={styles.image}
           />
           <Text style={styles.name}>{item.name}</Text>

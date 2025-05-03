@@ -66,8 +66,9 @@ export default function UserProfileView({ user, likable, fetchFunction}: Props) 
             <View key={index} style={styles.activityContainer}>
               <ActivityCard
                 key={index}
+                userId={activity.userID}
+                id={activity.id}
                 title={activity.title}
-                photoURL={Urls.minio + activity.photoURL}
               />
               {likable && (
                 <View style={styles.likeContainer}>

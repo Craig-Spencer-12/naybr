@@ -1,4 +1,4 @@
-import { Profile, Session } from "@/types/Profile";
+import { Activity, Profile, Session } from "@/types/Profile";
 
 export const EmptyUser: Profile = {
     firstName: '',
@@ -14,4 +14,10 @@ export const EmptySession: Session = {
     isLoggedIn: false,
     id: "",
     user: EmptyUser
+}
+
+export const EmptyActivity: Activity = {
+    id: "",
+    userID: "",
+    title: "",
 }

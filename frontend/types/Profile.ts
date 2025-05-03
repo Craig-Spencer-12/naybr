@@ -15,10 +15,9 @@ export type Session = {
 }
 
 export type Activity = {
-    id?: string
+    id: string
     userID: string
     title: string
-    photoURL: string
 }
 
 export type Like = {

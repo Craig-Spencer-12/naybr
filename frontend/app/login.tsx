@@ -8,7 +8,7 @@ export default function LoginScreen() {
     return (
         <View>
             <ThemedText type="subtitle">Login Screen</ThemedText>
-            <Button title="Login" onPress={() => logIn('0d2a7862-4443-4046-bde4-71f8cbb9e5b7')}></Button>
+            <Button title="Login" onPress={() => logIn('3f07b805-d67c-4b8b-b214-bc72ca75ed78')}></Button>
         </View>
     )
 

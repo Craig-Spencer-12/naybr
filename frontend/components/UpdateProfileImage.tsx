@@ -3,6 +3,7 @@ import { View, Image, StyleSheet, TouchableOpacity, Alert } from 'react-native'
 import * as ImagePicker from 'expo-image-picker'
 import { useSession } from '@/utils/authContext'
 import { Urls } from '@/constants/Urls'
+import { uploadImage } from '@/api/fetchClient'
 
 export default function UpdateProfileImage() {
 
@@ -15,48 +16,20 @@ export default function UpdateProfileImage() {
             quality: 1,
         })
 
+        const fileName = "profile-photo.jpg"
+
         if (!result.canceled && result.assets.length > 0) {
-            uploadImage(result.assets[0].uri)
-        }
-    }
+            const ok = await uploadImage(session.id, fileName, result.assets[0].uri)
 
-    const uploadImage = async (uri: string): Promise<boolean> => {
-        // TODO ensure all image types work
-        // const fileName = uri.split('/').pop() ?? 'upload.jpg'
-        // const match = /\.(\w+)$/.exec(fileName)
-        // const type = match ? `${match[1]}` : `image`
-
-        const fileName = session.id + "_profile-photo.jpg"
-
-        const formData = new FormData()
-        formData.append('image', {
-            uri: uri,
-            name: fileName,
-            // type: `image/${type}`,
-            type: `image/jpeg`
-        } as any)
-
-        try {
-            let response = await fetch('http://192.168.1.209:8080/image', {
-                method: 'POST',
-                body: formData,
-            })
-
-            if (response.ok) {
+            if (ok) {
                 setSession(prev => ({
                     ...prev,
                     user: {
                         ...prev.user,
-                        profilePhotoURL: fileName+`?t=${Date.now()}`
+                        profilePhotoURL: `${session.id}/${fileName}?t=${Date.now()}`
                     }
                 }))
             }
-
-            return response.ok
-
-        } catch (err) {
-            console.log('Upload error:', err)
-            return false
         }
     }
 

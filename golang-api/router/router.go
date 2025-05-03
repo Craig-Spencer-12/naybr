@@ -13,7 +13,7 @@ func RunRouter() {
 	engine.POST("/activities", CreateActivity)
 
 	engine.POST("/image", UploadImage)
-	engine.GET("/image/:filename", GetImage)
+	engine.GET("/image/:userId/:filename", GetImage)
 
 	engine.POST("/like", SendLike)
 	engine.GET("/likes/:id", GetLikeList)

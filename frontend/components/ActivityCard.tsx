@@ -1,13 +1,18 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
 import { Activity } from '@/types/Profile'
+import { useSession } from '@/utils/authContext';
+import { Urls } from '@/constants/Urls';
 
 type Props = {
-  title: string,
-  photoURL: string
+  userId: string
+  id: string
+  title: string
 };
 
-export default function ActivityCard({ title, photoURL }: Props) {
+export default function ActivityCard({ userId, id, title }: Props) {
+  const photoURL = `${Urls.minio}${userId}/${id}.jpg`
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{title}</Text>

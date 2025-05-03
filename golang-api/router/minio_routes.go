@@ -12,12 +12,14 @@ import (
 
 func UploadImage(c *gin.Context) {
 
+	folder := c.Request.FormValue("folder")
 	file, fileHeader, err := c.Request.FormFile("image")
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 	defer file.Close()
+	fileName := fmt.Sprintf("%s/%s", folder, fileHeader.Filename)
 
 	tmpFile, err := os.CreateTemp("", "uploaded-*")
 	if err != nil {
@@ -32,7 +34,7 @@ func UploadImage(c *gin.Context) {
 		return
 	}
 
-	err = database.UploadImageQuery("test", fileHeader.Filename, tmpFile.Name(), "image/jpeg")
+	err = database.UploadImageQuery("user-images-bucket", fileName, tmpFile.Name(), "image/jpeg")
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to upload file to MinIO"})
 		return
@@ -43,10 +45,12 @@ func UploadImage(c *gin.Context) {
 
 func GetImage(c *gin.Context) {
 
+	userId := c.Param("userId")
 	fileName := c.Param("filename")
-	bucketName := "test"
+	path := fmt.Sprintf("%s/%s", userId, fileName)
+	bucketName := "user-images-bucket"
 
-	imageObject, err := database.GetImageQuery(bucketName, fileName)
+	imageObject, err := database.GetImageQuery(bucketName, path)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get the file from MinIO"})
 	}

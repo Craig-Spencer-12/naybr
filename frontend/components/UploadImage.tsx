@@ -1,16 +1,17 @@
 import React, { useState } from 'react'
 import { View, Image, StyleSheet, TouchableOpacity } from 'react-native'
 import * as ImagePicker from 'expo-image-picker'
+import { useSession } from '@/utils/authContext'
 
 type Props = {
-  defaultUri: string
-  setFunction?: React.Dispatch<React.SetStateAction<string>>
+    defaultUri: string
+    setFunction: React.Dispatch<React.SetStateAction<string>>
 }
 
 export default function UploadImageButton({
     defaultUri,
     setFunction,
-  }: Props) {
+}: Props) {
     const [imageUri, setImageUri] = useState<string | null>(defaultUri)
 
     const pickImage = async () => {
@@ -21,40 +22,8 @@ export default function UploadImageButton({
         })
 
         if (!result.canceled && result.assets.length > 0) {
-            uploadImage(result.assets[0].uri)
-        }
-    }
-
-    const uploadImage = async (uri: string): Promise<boolean> => {
-        const fileName = uri.split('/').pop() ?? 'upload.jpg'
-        const match = /\.(\w+)$/.exec(fileName)
-        const type = match ? `image/${match[1]}` : `image`
-
-        const formData = new FormData()
-        formData.append('image', {
-            uri: uri,
-            name: fileName,
-            type: `image/${type}`,
-        } as any)
-
-        try {
-            let response = await fetch('http://192.168.1.209:8080/image', {
-                method: 'POST',
-                body: formData,
-            })
-
-            if (response.ok) {
-                setImageUri(fileName)
-                if (setFunction) {
-                    setFunction(fileName)
-                }
-            }
-
-            return response.ok
-
-        } catch (err) {
-            console.log('Upload error:', err)
-            return false
+            setImageUri(result.assets[0].uri)
+            setFunction(result.assets[0].uri)
         }
     }
 
@@ -64,7 +33,7 @@ export default function UploadImageButton({
                 {!imageUri || imageUri === "" ? (
                     <Image source={require('../assets/images/addImage.png')} style={styles.buttonImage} />
                 ) : (
-                    <Image source={{ uri: "http://192.168.1.209:8080/image/"+imageUri }} style={styles.buttonImage} />
+                    <Image source={{ uri: imageUri }} style={styles.buttonImage} />
                 )}
             </TouchableOpacity>
         </View>

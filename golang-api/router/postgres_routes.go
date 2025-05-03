@@ -84,7 +84,7 @@ func CreateActivity(c *gin.Context) {
 		return
 	}
 
-	if err := database.CreateActivityQuery(newActivity); err != nil {
+	if err := database.CreateActivityQuery(&newActivity); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"Message": "Failed to create activity", "Error": err})
 		return
 	}

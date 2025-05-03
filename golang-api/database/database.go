@@ -66,7 +66,6 @@ func InitDatabase() {
 	    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
 	    user_id UUID REFERENCES users(id) ON DELETE CASCADE,
 		title VARCHAR(50) NOT NULL,
-	    photo_url VARCHAR(255) NOT NULL,
 	    image_order INTEGER DEFAULT 0,
 	    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -162,7 +161,7 @@ func GetViewableProfileQuery(userId string) (models.ViewableProfile, error) {
 		return profile, err
 	}
 
-	query = `SELECT id, user_id, title, photo_url FROM activities WHERE user_id = $1`
+	query = `SELECT id, user_id, title FROM activities WHERE user_id = $1`
 	rows, err := db.Query(query, userId)
 	if err != nil {
 		log.Println("Error fetching activities:", err)
@@ -173,7 +172,7 @@ func GetViewableProfileQuery(userId string) (models.ViewableProfile, error) {
 	var activities []models.Activity
 	for rows.Next() {
 		var a models.Activity
-		if err := rows.Scan(&a.ID, &a.UserID, &a.Title, &a.PhotoURL); err != nil {
+		if err := rows.Scan(&a.ID, &a.UserID, &a.Title); err != nil {
 			log.Println("Error scanning activity row:", err)
 			return profile, err
 		}
@@ -190,9 +189,9 @@ func GetViewableProfileQuery(userId string) (models.ViewableProfile, error) {
 	return profile, nil
 }
 
-func CreateActivityQuery(activity models.Activity) error {
-	query := `INSERT INTO activities (user_id, title, photo_url, image_order) VALUES ($1, $2, $3, $4) RETURNING id`
-	err := db.QueryRow(query, activity.UserID, activity.Title, activity.PhotoURL, activity.ImageOrder).Scan(&activity.ID)
+func CreateActivityQuery(activity *models.Activity) error {
+	query := `INSERT INTO activities (user_id, title, image_order) VALUES ($1, $2, $3) RETURNING id`
+	err := db.QueryRow(query, activity.UserID, activity.Title, activity.ImageOrder).Scan(&activity.ID)
 	if err != nil {
 		log.Println("Database insert error:", err)
 		return err

@@ -17,7 +17,6 @@ type Activity struct {
 	ID         string `json:"id"`
 	UserID     string `json:"userID"`
 	Title      string `json:"title"`
-	PhotoURL   string `json:"photoURL"`
 	ImageOrder int    `json:"imageOrder"`
 }
 
