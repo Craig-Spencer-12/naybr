@@ -35,7 +35,7 @@ export default function UserProfileView({ user, likable, nextUserFunc }: Props) 
       <ParallaxScrollView
         headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
         headerImage={
-          <Image source={{ uri: Urls.minio + user!.profilePhotoURL }} style={{ width: '100%', height: '100%' }} />
+          <Image source={{ uri: Urls.minio + user.profilePhotoURL }} style={{ width: '100%', height: '100%' }} />
         }>
         <ThemedView style={styles.titleContainer}>
           <ThemedText type="title">{user!.firstName}</ThemedText>

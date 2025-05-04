@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { View, Image, StyleSheet, TouchableOpacity } from 'react-native'
-import * as ImagePicker from 'expo-image-picker'
-import { useSession } from '@/utils/authContext'
+import { usePickImage } from '@/hooks/usePickImage'
 
 type Props = {
     defaultUri: string
@@ -13,23 +12,11 @@ export default function UploadImageButton({
     setFunction,
 }: Props) {
     const [imageUri, setImageUri] = useState<string | null>(defaultUri)
-
-    const pickImage = async () => {
-        const result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ['images'],
-            allowsEditing: true,
-            quality: 1,
-        })
-
-        if (!result.canceled && result.assets.length > 0) {
-            setImageUri(result.assets[0].uri)
-            setFunction(result.assets[0].uri)
-        }
-    }
+    const { selectActivityImage } = usePickImage()
 
     return (
         <View style={styles.container}>
-            <TouchableOpacity onPress={pickImage} style={styles.buttonContainer}>
+            <TouchableOpacity onPress={() => selectActivityImage(setImageUri, setFunction)} style={styles.buttonContainer}>
                 {!imageUri || imageUri === "" ? (
                     <Image source={require('../assets/images/addImage.png')} style={styles.buttonImage} />
                 ) : (
