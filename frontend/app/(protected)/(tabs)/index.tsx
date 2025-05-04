@@ -1,35 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { Urls } from '@/constants/Urls';
 import { Profile } from '@/types/Profile'
 import UserProfileView from '@/components/UserProfileView';
 import { EmptyUser } from '@/constants/Empty';
-import { fetchProfile } from '@/api/fetchClient';
 import { useSession } from '@/utils/authContext';
+import { useGetRandomUser } from '@/hooks/useGetRandomUser';
 
 export default function NaybrsScreen() {
   const [profile, setProfile] = useState<Profile>(EmptyUser)
-  const [userId, setUserId] = useState<string>('ebb97356-8167-4fd4-90e9-99bfb6d47489')
+  const [userId, setUserId] = useState<string>('')
   const { session } = useSession()
+  const { getRandomUser } = useGetRandomUser()
 
   useEffect(() => {
-    getRandomUser()
-  }, [])
-
-  const getRandomUser = async () => {
-    try {
-      let randId = userId
-      while (randId === userId || randId === session.id) {
-        const res = await fetch(Urls.randomUser)
-        randId = JSON.parse(await res.text())
-      }
-      setUserId(randId)
-
-      const user = await fetchProfile(randId)
-      setProfile(user)
-    } catch (err) {
-      console.log(`Error: ${err}`)
-    }
-  }
-
-  return <UserProfileView user={profile} likable={true} fetchFunction={getRandomUser}/>
+    getRandomUser(userId, setUserId, setProfile)
+  }, [session.id])
+  
+  return <UserProfileView user={profile} likable={true} nextUserFunc={() => getRandomUser(userId, setUserId, setProfile)} />
 }

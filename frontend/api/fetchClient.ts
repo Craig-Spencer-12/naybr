@@ -1,8 +1,8 @@
 import { Urls } from "@/constants/Urls"
-import { EmptySession } from "@/constants/Empty"
-import { Profile } from "@/types/Profile"
+import { EmptyActivity, EmptyLikeList, EmptySession } from "@/constants/Empty"
+import { Activity, Like, LikeList, Profile, UpdatableProfileElement } from "@/types/Profile"
 
-export async function get(url: string): Promise<any> {
+export async function fetchGeneric(url: string): Promise<any> {
     try {
         const res = await fetch(url)
         const data = await res.json()
@@ -12,11 +12,31 @@ export async function get(url: string): Promise<any> {
     }
 }
 
+export async function fetchLikes(id: string): Promise<LikeList> {
+    try {
+        const res = await fetch(`${Urls.likes}/${id}`)
+        const data = await res.json()
+
+        const parsedList: LikeList = {
+            likes: data.list.map((item: any) => ({
+                userId: item.userId,
+                name: item.firstName,
+            })),
+        }
+
+        return parsedList
+
+    } catch (err) {
+        console.log(`Error: ${err}`)
+        return EmptyLikeList
+    }
+}
+
 export const fetchProfile = async (id: string): Promise<Profile> => {
     try {
-        const res = await fetch(Urls.getProfile + id)
+        const res = await fetch(Urls.user + id)
         let data: Profile = await res.json()
-        data.profilePhotoURL = id + "/profile-photo.jpg"
+        data.profilePhotoURL = `${id}/${Urls.profilePhoto}`
         return data
     } catch (err) {
         console.log(`Error: ${err}`)
@@ -24,30 +44,104 @@ export const fetchProfile = async (id: string): Promise<Profile> => {
     }
 }
 
-export const uploadImage = async (folder: string, name: string, uri: string): Promise<boolean> => {
-        const fileName = uri.split('/').pop() ?? 'upload.jpg'
-        // const match = /\.(\w+)$/.exec(fileName)
-        // const type = match ? `image/${match[1]}` : `image`
+export const fetchUploadImage = async (folder: string, name: string, uri: string): Promise<boolean> => {
+    const fileName = uri.split('/').pop() ?? 'upload.jpg'
+    // const match = /\.(\w+)$/.exec(fileName)
+    // const type = match ? `image/${match[1]}` : `image`
 
-        const formData = new FormData()
-        formData.append("folder", folder)
-        formData.append('image', {
-            uri: uri,
-            name: name,
-            // type: `image/${type}`,
-            type: `image/jpeg`,
-        } as any)
+    const formData = new FormData()
+    formData.append("folder", folder)
+    formData.append('image', {
+        uri: uri,
+        name: name,
+        // type: `image/${type}`,
+        type: `image/jpeg`,
+    } as any)
 
-        try {
-            let response = await fetch('http://192.168.1.209:8080/image', {
-                method: 'POST',
-                body: formData,
-            })
+    try {
+        let response = await fetch('http://192.168.1.209:8080/image', {
+            method: 'POST',
+            body: formData,
+        })
 
-            return response.ok
+        return response.ok
 
-        } catch (err) {
-            console.log('Upload error:', err)
-            return false
-        }
+    } catch (err) {
+        console.log('Upload error:', err)
+        return false
     }
+}
+
+export const fetchRandomId = async (): Promise<string> => {
+    try {
+        const res = await fetch(Urls.randomUser)
+        return JSON.parse(await res.text())
+    } catch (err) {
+        console.log(`Error: ${err}`)
+        return ""
+    }
+}
+
+export const fetchUpdateProfile = async (id: string, key: UpdatableProfileElement, value: string): Promise<boolean> => {
+    try {
+        const response = await fetch(Urls.user + id, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ [key]: value }),
+        })
+
+        return response.ok
+    } catch (err) {
+        console.log(`Error: ${err}`)
+        return false
+    }
+}
+
+export const fetchPostActivity = async (id: string, title: string): Promise<Activity> => {
+    const activity: Activity = {
+        id: '',
+        userID: id,
+        title: title,
+    }
+
+    try {
+        const res = await fetch(Urls.activities, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(activity),
+        })
+
+        return res.json()
+
+    } catch (err) {
+        console.log(`Error: ${err}`)
+    }
+
+    return EmptyActivity
+}
+
+export const fetchPostLike = async (likerId: string, activity: Activity): Promise<boolean> => {
+    const like: Like = {
+        likerId: likerId,
+        likedId: activity.userID,
+        activityId: activity.id
+    }
+
+    try {
+        const res = await fetch(Urls.likes, {
+            method: 'POST',
+            body: JSON.stringify(like),
+        })
+
+        return res.ok
+
+    } catch (err) {
+        console.log(`Error: ${err}`)
+    }
+
+    return false
+}

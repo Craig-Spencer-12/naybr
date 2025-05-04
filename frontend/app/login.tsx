@@ -1,20 +1,19 @@
-import { ThemedText } from "@/components/ThemedText";
-import { useSession } from "@/utils/authContext";
-import { Button, View } from "react-native";
+import { ThemedText } from '@/components/ThemedText'
+import { useSession } from '@/utils/authContext'
+import { Button, View } from 'react-native'
 
 export default function LoginScreen() {
-    const {logIn} = useSession()
+    const { logIn } = useSession()
 
     return (
         <View>
-            <ThemedText type="subtitle">Login Screen</ThemedText>
-            <Button title="Login" onPress={() => logIn('3f07b805-d67c-4b8b-b214-bc72ca75ed78')}></Button>
+            <ThemedText type='subtitle'>Login Screen</ThemedText>
+            <Button title='Login' onPress={() => logIn('3f07b805-d67c-4b8b-b214-bc72ca75ed78')}></Button>
         </View>
     )
-
-    // TODO replace hard coded id with login flow
 }
 
+// TODO replace hard coded id with login flow
 // George     | 0d2a7862-4443-4046-bde4-71f8cbb9e5b7
 // Craig      | 3f07b805-d67c-4b8b-b214-bc72ca75ed78
 // Zach       | ebb97356-8167-4fd4-90e9-99bfb6d47489

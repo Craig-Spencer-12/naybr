@@ -1,69 +1,45 @@
-import { Image, StyleSheet, Platform, FlatList, TouchableOpacity, Text } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { Urls } from '@/constants/Urls';
-import { useEffect, useState } from 'react';
-import { get } from '@/api/fetchClient';
-import { useSession } from '@/utils/authContext';
-import { LikeList } from '@/types/Profile';
-import { ThemedView } from '@/components/ThemedView';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParamList } from '@/types/types'; 
+import { Image, StyleSheet, FlatList, TouchableOpacity, Text } from 'react-native'
+import { useNavigation } from '@react-navigation/native'
+import { Urls } from '@/constants/Urls'
+import { useCallback, useEffect, useState } from 'react'
+import { fetchLikes } from '@/api/fetchClient'
+import { useSession } from '@/utils/authContext'
+import { LikeList } from '@/types/Profile'
+import { StackNavigationProp } from '@react-navigation/stack'
+import { RootStackParamList } from '@/types/types' 
 
-type ViewLikeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'ViewLike'>;
+type ViewLikeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'ViewLike'>
 
 export default function LikesScreen() {
 
   const { session } = useSession()
-  const [likes, setLikes] = useState<LikeList>();
+  const [likes, setLikes] = useState<LikeList>()
 
   const navigation = useNavigation<ViewLikeScreenNavigationProp>()
-
-  const handleNavigate = (id: string) => {
-    navigation.navigate("ViewLike", {
-      userId: id
-    });
-
-    // router.push({
-    //   pathname: '/likes/viewLike',
-    //   params: { userId: id},
-    // });
-  };
-
-  async function fetchData() {
-    const data = await get(Urls.getLikes + session.id)
-
-    const parsed: LikeList = {
-      Likes: data.list.map((item: any) => ({
-        userId: item.userId,
-        name: item.firstName,
-      })),
-    };
-
-    setLikes(parsed)
-  }
+  const handleNavigate = useCallback((id: string) => {
+    navigation.navigate("ViewLike", { userId: id })
+  }, [navigation])
 
   useEffect(() => {
-    fetchData()
-  }, []);
-
-
+    fetchLikes(session.id).then(setLikes)
+  }, [session.id])
 
   return (
     <FlatList
-      data={likes?.Likes}
-      // keyExtractor={(item) => item.userId}
+      data={likes?.likes}
+      keyExtractor={(item) => item.userId}
       contentContainerStyle={styles.container}
       renderItem={({ item }) => (
         <TouchableOpacity style={styles.card} onPress={() => handleNavigate(item.userId)}>
           <Image
-            source={{ uri: `${Urls.minio}${item.userId}/profile-photo.jpg` }}
+            source={{ uri: `${Urls.minio}${item.userId}/${Urls.profilePhoto}` }}
             style={styles.image}
           />
           <Text style={styles.name}>{item.name}</Text>
         </TouchableOpacity>
       )}
     />
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -106,4 +82,4 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 18,
   },
-});
+})

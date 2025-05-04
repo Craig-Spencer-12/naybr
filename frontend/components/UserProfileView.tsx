@@ -9,43 +9,26 @@ import { ThemedView } from '@/components/ThemedView';
 import ActivityCard from '@/components/ActivityCard';
 import { IconSymbol } from './ui/IconSymbol';
 import { useSession } from '@/utils/authContext';
-
-async function sendLike(likerId: string, activity: Activity) {
-  let like: Like = {
-    likerId: likerId,
-    likedId: activity.userID,
-    activityId: activity.id!
-  }
-
-  try {
-    fetch('http://192.168.1.209:8080/like', {
-      method: 'POST',
-      body: JSON.stringify(like),
-    })
-
-  } catch (err) {
-    console.log('Upload error:', err)
-    return false
-  }
-}
-
-
-async function notLike() { // TODO fix this function
-  // let newUser = userInView
-  // newUser!.firstName = "We did it!"
-  // setUserInView(newUser)
-  Alert.alert("this", "that")
-}
+import { fetchPostLike } from '@/api/fetchClient';
 
 type Props = {
   user: Profile
   likable: boolean
-  fetchFunction?: () => void
+  nextUserFunc?: () => void
 };
 
-export default function UserProfileView({ user, likable, fetchFunction}: Props) {
+export default function UserProfileView({ user, likable, nextUserFunc }: Props) {
 
-  const {session} = useSession()
+  const { session } = useSession()
+
+  const like = (activity: Activity) => {
+    fetchPostLike(session.id, activity)
+    nextUserFunc && nextUserFunc()
+  }
+
+  const notLike = () => {
+    nextUserFunc && nextUserFunc()
+  }
 
   return (
     <View style={{ flex: 1 }}>
@@ -61,7 +44,7 @@ export default function UserProfileView({ user, likable, fetchFunction}: Props) 
         <ThemedText>{user!.bio}</ThemedText>
 
         <View style={styles.container}>
-          
+
           {user.activities && (user!.activities.map((activity, index) => (
             <View key={index} style={styles.activityContainer}>
               <ActivityCard
@@ -72,7 +55,7 @@ export default function UserProfileView({ user, likable, fetchFunction}: Props) 
               />
               {likable && (
                 <View style={styles.likeContainer}>
-                  <TouchableOpacity onPress={() => {sendLike(session.id, activity);fetchFunction && fetchFunction()}}>
+                  <TouchableOpacity onPress={() => { like(activity) }}>
                     <View style={styles.circle}>
                       <IconSymbol size={40} name="heart.fill" color={'#ffffff'} />
                     </View>
@@ -87,7 +70,7 @@ export default function UserProfileView({ user, likable, fetchFunction}: Props) 
 
       {likable && (
         <View style={styles.notLikeContainer}>
-          <TouchableOpacity onPress={fetchFunction}>
+          <TouchableOpacity onPress={notLike}>
             <View style={styles.notLikeCircle}>
               <IconSymbol size={40} name="xmark" color={'#ffffff'} />
             </View>

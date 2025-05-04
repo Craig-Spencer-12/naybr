@@ -1,36 +1,14 @@
-import SelectableList from "@/components/SelectableList";
-import { Urls } from "@/constants/Urls";
-import { useSession } from "@/utils/authContext";
-import { Alert, StyleSheet, View } from "react-native";
+import SelectableList from '@/components/SelectableList'
+import { useUpdateProfile } from '@/hooks/useUpdateProfile'
+import { useSession } from '@/utils/authContext'
+import { StyleSheet, View } from 'react-native'
 
 export default function BoroughScreen() {
-    const { session, setSession } = useSession()
-
-    async function changeBorough(val: string) {
-        const response = await fetch(Urls.postProfile + session.id, {
-            method: 'PUT',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({"borough": val}),
-          })
-    
-        if (response.ok) {
-            setSession(prev => ({
-                ...prev,
-                user: {
-                    ...prev.user,
-                    borough: val
-                }
-            }))
-        } else {
-            Alert.alert("Error", "Failed to set borough")
-        }
-    }
+    const { session } = useSession()
+    const { updateProfileField: updateProfile } = useUpdateProfile()
 
     return (
         <View style={styles.stepContainer}>
-
             <SelectableList
                 options={[
                     { label: 'Manhattan', value: 'Manhattan' },
@@ -40,11 +18,10 @@ export default function BoroughScreen() {
                     { label: 'Staten Island', value: 'Staten Island' },
                 ]}
                 selectedValue={session.user.borough}
-                onSelect={(val) => changeBorough(val)}
+                onSelect={(val) => updateProfile('borough', val)}
             />
-
         </View>
-    );
+    )
 }
 
 const styles = StyleSheet.create({
@@ -78,4 +55,4 @@ const styles = StyleSheet.create({
         gap: 16,
         overflow: 'hidden',
     },
-});
+})

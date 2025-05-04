@@ -1,34 +1,12 @@
-import { Urls } from "@/constants/Urls";
-import { useSession } from "@/utils/authContext";
-import { useState } from "react";
-import { Alert, StyleSheet, Text, TextInput, View } from "react-native";
+import { useUpdateProfile } from '@/hooks/useUpdateProfile'
+import { useSession } from '@/utils/authContext'
+import { useState } from 'react'
+import { StyleSheet, TextInput, View } from 'react-native'
 
 export default function BioScreen() {
-
-    const { session, setSession } = useSession()
+    const { session } = useSession()
+    const { updateProfileField: updateProfile } = useUpdateProfile()
     const [ text, setText ] = useState(session.user.bio)
-
-    async function changeBio(val: string) {
-        const response = await fetch(Urls.postProfile + session.id, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ "bio": val }),
-        })
-
-        if (response.ok) {
-            setSession(prev => ({
-                ...prev,
-                user: {
-                    ...prev.user,
-                    bio: val
-                }
-            }))
-        } else {
-            Alert.alert("Error", "Failed to set bio")
-        }
-    }
 
     return (
         <View style={styles.stepContainer}>
@@ -36,30 +14,18 @@ export default function BioScreen() {
                 style={styles.input}
                 value={text}
                 onChangeText={setText}
-                placeholder="Enter Bio..."
-                returnKeyType="done"
-                onSubmitEditing={() => changeBio(text)}
-                onBlur={() => changeBio(text)}
+                placeholder='Enter Bio...'
+                returnKeyType='done'
+                onSubmitEditing={() => updateProfile('bio', text)}
+                onBlur={() => updateProfile('bio', text)}
                 autoCorrect={true}
                 multiline={true}
                 numberOfLines={4}
-                textAlignVertical="top"
+                textAlignVertical='top'
+                submitBehavior='blurAndSubmit'
             />
-
-            {/* <SelectableList
-                options={[
-                    { label: 'Manhattan', value: 'Manhattan' },
-                    { label: 'Brooklyn', value: 'Brooklyn' },
-                    { label: 'Queens', value: 'Queens' },
-                    { label: 'Bronx', value: 'Bronx' },
-                    { label: 'Staten Island', value: 'Staten Island' },
-                ]}
-                selectedValue={session.user.borough}
-                onSelect={(val) => changeBio(val)}
-            /> */}
-
         </View>
-    );
+    )
 }
 
 const styles = StyleSheet.create({
@@ -100,4 +66,4 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         color: '#fff'
       },
-});
+})

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, FlatList, StyleSheet } from 'react-native';
+import { Text, TouchableOpacity, FlatList, StyleSheet } from 'react-native';
 
 type Option = {
   label: string;

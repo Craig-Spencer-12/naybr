@@ -8,6 +8,8 @@ export type Profile = {
     profilePhotoURL: string
 }
 
+export type UpdatableProfileElement = 'borough' | 'gender' | 'bio'
+
 export type Session = {
     isLoggedIn: boolean
     id: string
@@ -32,5 +34,5 @@ export type ViewableLike = {
 }
 
 export type LikeList = {
-    Likes: ViewableLike[]
+    likes: ViewableLike[]
 }

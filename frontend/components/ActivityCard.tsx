@@ -1,14 +1,12 @@
-import React from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
-import { Activity } from '@/types/Profile'
-import { useSession } from '@/utils/authContext';
-import { Urls } from '@/constants/Urls';
+import React from 'react'
+import { View, Text, Image, StyleSheet } from 'react-native'
+import { Urls } from '@/constants/Urls'
 
 type Props = {
   userId: string
   id: string
   title: string
-};
+}
 
 export default function ActivityCard({ userId, id, title }: Props) {
   const photoURL = `${Urls.minio}${userId}/${id}.jpg`
@@ -18,7 +16,7 @@ export default function ActivityCard({ userId, id, title }: Props) {
       <Text style={styles.title}>{title}</Text>
       <Image source={{ uri: photoURL }} style={styles.image} />
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -39,4 +37,4 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#ECEDEE',
   },
-});
+})

@@ -1,4 +1,4 @@
-import { Activity, Profile, Session } from "@/types/Profile";
+import { Activity, LikeList, Profile, Session } from "@/types/Profile";
 
 export const EmptyUser: Profile = {
     firstName: '',
@@ -21,3 +21,5 @@ export const EmptyActivity: Activity = {
     userID: "",
     title: "",
 }
+
+export const EmptyLikeList: LikeList = {likes: []}

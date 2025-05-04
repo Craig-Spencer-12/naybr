@@ -1,35 +1,14 @@
-import SelectableList from "@/components/SelectableList";
-import { Urls } from "@/constants/Urls";
-import { useSession } from "@/utils/authContext";
-import { Alert, StyleSheet, View } from "react-native";
-export default function GenderScreen() {
-    const { session, setSession } = useSession()
+import SelectableList from '@/components/SelectableList'
+import { useUpdateProfile } from '@/hooks/useUpdateProfile'
+import { useSession } from '@/utils/authContext'
+import { StyleSheet, View } from 'react-native'
 
-    async function changeGender(val: string) {
-        const response = await fetch(Urls.postProfile + session.id, {
-            method: 'PUT',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({"gender": val}),
-          })
-    
-        if (response.ok) {
-            setSession(prev => ({
-                ...prev,
-                user: {
-                    ...prev.user,
-                    gender: val
-                }
-            }))
-        } else {
-            Alert.alert("Error", "Failed to set gender")
-        }
-    }
+export default function GenderScreen() {
+    const { session } = useSession()
+    const { updateProfileField: updateProfile } = useUpdateProfile()
 
     return (
         <View style={styles.stepContainer}>
-
             <SelectableList
                 options={[
                     { label: 'Male', value: 'M' },
@@ -38,11 +17,10 @@ export default function GenderScreen() {
                     { label: 'Other', value: 'O' },
                 ]}
                 selectedValue={session.user.gender}
-                onSelect={(val) => changeGender(val)}
+                onSelect={(val) => updateProfile('gender', val)}
             />
-
         </View>
-    );
+    )
 }
 
 const styles = StyleSheet.create({
@@ -76,4 +54,4 @@ const styles = StyleSheet.create({
         gap: 16,
         overflow: 'hidden',
     },
-});
+})

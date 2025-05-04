@@ -1,29 +1,24 @@
 import { StyleSheet, View, Text, KeyboardAvoidingView, Button, TouchableOpacity } from 'react-native'
-import { Platform } from 'react-native';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
-
-import Animated, {
-  useAnimatedRef,
-} from 'react-native-reanimated';
-
-import { useBottomTabOverflow } from '@/components/ui/TabBarBackground';
-import { useNavigation } from '@react-navigation/native';
-import { useSession } from '@/utils/authContext';
-import UpdateProfileImage from '@/components/UpdateProfileImage';
+import { Platform } from 'react-native'
+import { ThemedText } from '@/components/ThemedText'
+import { ThemedView } from '@/components/ThemedView'
+import Animated, { useAnimatedRef } from 'react-native-reanimated'
+import { useBottomTabOverflow } from '@/components/ui/TabBarBackground'
+import { useNavigation } from '@react-navigation/native'
+import { useSession } from '@/utils/authContext'
+import UpdateProfileImage from '@/components/UpdateProfileImage'
+import { useCallback } from 'react'
 
 export default function ProfileScreen() {
-
-  const { session, logOut } = useSession();
+  const { session, logOut } = useSession()
+  const scrollRef = useAnimatedRef<Animated.ScrollView>()
+  const bottom = useBottomTabOverflow()
 
   const navigation = useNavigation()
 
-  const handleNavigate = (location: string) => {
-    navigation.navigate(location as never);
-  }
-
-  const scrollRef = useAnimatedRef<Animated.ScrollView>();
-  const bottom = useBottomTabOverflow();
+  const handleNavigate = useCallback((location: string) => {
+    navigation.navigate(location as never)
+  }, [navigation])
 
   return (
     <KeyboardAvoidingView
@@ -42,13 +37,9 @@ export default function ProfileScreen() {
             <UpdateProfileImage />
           </View>
           <ThemedView style={styles.content}>
-            <ThemedText type="title">{session.user.firstName}</ThemedText>
+            <ThemedText type='title'>{session.user.firstName}</ThemedText>
           </ThemedView>
           <ThemedView style={styles.content}>
-
-            {/* <EditableText initialValue="user@example.com" onSave={(val) => console.log('Saved:', val)} />
-            <EditableText initialValue="Male" onSave={(val) => console.log('Saved:', val)} />
-            <EditableText initialValue="This is the bio" onSave={(val) => console.log('Saved:', val)} /> */}
 
             <TouchableOpacity onPress={() => handleNavigate('Borough')}>
               <Text style={styles.thisText}>Change Borough</Text>
@@ -66,13 +57,13 @@ export default function ProfileScreen() {
               <Text style={styles.thisText}>Create New Activity</Text>
             </TouchableOpacity>
 
-            <Button title="Logout" onPress={logOut}></Button>
+            <Button title='Logout' onPress={logOut}></Button>
 
           </ThemedView>
         </Animated.ScrollView>
       </ThemedView>
     </KeyboardAvoidingView>
-  );
+  )
 }
 
 const styles = StyleSheet.create({

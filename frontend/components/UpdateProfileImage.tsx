@@ -3,7 +3,7 @@ import { View, Image, StyleSheet, TouchableOpacity, Alert } from 'react-native'
 import * as ImagePicker from 'expo-image-picker'
 import { useSession } from '@/utils/authContext'
 import { Urls } from '@/constants/Urls'
-import { uploadImage } from '@/api/fetchClient'
+import { fetchUploadImage } from '@/api/fetchClient'
 
 export default function UpdateProfileImage() {
 
@@ -16,17 +16,15 @@ export default function UpdateProfileImage() {
             quality: 1,
         })
 
-        const fileName = "profile-photo.jpg"
-
         if (!result.canceled && result.assets.length > 0) {
-            const ok = await uploadImage(session.id, fileName, result.assets[0].uri)
+            const ok = await fetchUploadImage(session.id, Urls.profilePhoto, result.assets[0].uri)
 
             if (ok) {
                 setSession(prev => ({
                     ...prev,
                     user: {
                         ...prev.user,
-                        profilePhotoURL: `${session.id}/${fileName}?t=${Date.now()}`
+                        profilePhotoURL: `${session.id}/${Urls.profilePhoto}?t=${Date.now()}`
                     }
                 }))
             }
