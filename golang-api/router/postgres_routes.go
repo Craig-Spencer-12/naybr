@@ -80,6 +80,22 @@ func CreateActivity(c *gin.Context) {
 	c.IndentedJSON(http.StatusCreated, newActivity)
 }
 
+func DeleteActivity(c *gin.Context) {
+	id := c.Param("id")
+
+	deleted, err := database.DeleteActivityQuery(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"Message": "Failed to delete activity", "Error": err})
+		return
+	}
+
+	if !deleted {
+		c.JSON(http.StatusNotFound, gin.H{"Message": "Activity %s not found", "Error": err})
+	}
+
+	c.Status(http.StatusNoContent)
+}
+
 func SendLike(c *gin.Context) {
 	var newLike models.Like
 

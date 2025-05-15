@@ -11,6 +11,7 @@ func RunRouter() {
 	engine.GET("/user/random", GetRandomUserId)
 
 	engine.POST("/activities", CreateActivity)
+	engine.DELETE("/activities/:id", DeleteActivity)
 
 	engine.POST("/likes", SendLike)
 	engine.GET("/likes/:id", GetLikeList)
