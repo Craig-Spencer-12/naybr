@@ -135,6 +135,27 @@ func CreateActivityQuery(activity *models.Activity) error {
 	return nil
 }
 
+func DeleteActivityQuery(id string) (bool, error) {
+	query := `DELETE FROM activities WHERE id = $1`
+	result, err := db.Exec(query, id)
+	if err != nil {
+		log.Println("Database delete error:", err)
+		return false, err
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		log.Println("Failed to get affected rows:", err)
+		return false, err
+	}
+
+	if rowsAffected == 0 {
+		return false, nil
+	}
+
+	return true, nil
+}
+
 func GetViewableLikeListQuery(id string) (models.ViewableLikeList, error) {
 	var result models.ViewableLikeList
 

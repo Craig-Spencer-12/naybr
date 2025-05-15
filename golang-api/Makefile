@@ -1,6 +1,6 @@
 compose:
 # eval $(minikube docker-env -u)
-	docker compose up --build
+	docker compose -p project up --build
 
 run:
 	docker run --rm -it -p 8080:8080/tcp golang-api:latest
