@@ -27,6 +27,13 @@ type Like struct {
 	ActivityID string `json:"activityId"`
 }
 
+type Match struct {
+	ID         string `json:"id"`
+	LikerID    string `json:"likerId"`
+	LikedID    string `json:"likedId"`
+	ActivityID string `json:"activityId"`
+}
+
 type ViewableLike struct {
 	UserID    string `json:"userId"`
 	FirstName string `json:"firstName"`
@@ -48,4 +55,10 @@ type ViewableProfile struct {
 type Table struct {
 	Name  string
 	Query string
+}
+
+type ReturnManageLike struct {
+	MatchCreated bool   `json:"matchCreated"`
+	LikeDeleted  bool   `json:"likeDeleted"`
+	MatchID      string `json:"matchId"`
 }

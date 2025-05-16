@@ -90,7 +90,7 @@ func DeleteActivity(c *gin.Context) {
 	}
 
 	if !deleted {
-		c.JSON(http.StatusNotFound, gin.H{"Message": "Activity %s not found", "Error": err})
+		c.JSON(http.StatusNotFound, gin.H{"Message": "Activity not found", "Error": err})
 	}
 
 	c.Status(http.StatusNoContent)
@@ -122,4 +122,63 @@ func GetLikeList(c *gin.Context) {
 	}
 
 	c.IndentedJSON(http.StatusOK, list)
+}
+
+// func GetLike(c *gin.Context) {
+// 	id := c.Param("id")
+
+// 	like, err := database.GetLikeQuery(id)
+// 	if err != nil {
+// 		c.IndentedJSON(http.StatusNotFound, gin.H{"message": err.Error()})
+// 		return
+// 	}
+
+// 	c.IndentedJSON(http.StatusOK, like)
+// }
+
+func RejectLike(c *gin.Context) {
+	id := c.Param("id")
+
+	deleted, err := database.DeleteLikeQuery(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"Message": "Failed to delete like", "Error": err})
+	}
+
+	if !deleted {
+		c.JSON(http.StatusNotFound, gin.H{"Message": "Like not found", "Error": err})
+	}
+
+	c.Status(http.StatusNoContent)
+}
+
+func AcceptLike(c *gin.Context) {
+	id := c.Param("id")
+
+	like, err := database.GetLikeQuery(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"Message": "Failed to get like", "Error": err})
+		return
+	}
+
+	newMatch := models.Match{
+		LikerID:    like.LikerID,
+		LikedID:    like.LikedID,
+		ActivityID: like.ActivityID,
+	}
+
+	if err := database.CreateMatchQuery(&newMatch); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"Message": "Failed to create match", "Error": err})
+		return
+	}
+
+	deleted, err := database.DeleteLikeQuery(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"Message": "Failed to delete like", "Error": err})
+	}
+
+	if !deleted {
+		c.JSON(http.StatusNotFound, gin.H{"Message": "Like not found", "Error": err})
+	}
+
+	c.IndentedJSON(http.StatusOK, newMatch)
 }
