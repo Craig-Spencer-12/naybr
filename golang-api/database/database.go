@@ -38,6 +38,8 @@ func InitDatabase() {
 	} else {
 		log.Printf(("Connected to database"))
 	}
+
+	CreateTables()
 }
 
 func CreateUserQuery(user models.User) error {
@@ -185,6 +187,22 @@ func GetViewableLikeListQuery(id string) (models.ViewableLikeList, error) {
 	return result, nil
 }
 
+func GetLikeQuery(id string) (models.Like, error) {
+
+	var like models.Like
+	like.ID = id
+
+	query := `SELECT liker_id, liked_id, activity_id FROM likes WHERE id = $1`
+	err := db.QueryRow(query, id).Scan(&like.LikerID, &like.LikedID, &like.ActivityID)
+
+	if err != nil {
+		log.Println("Failed to get like: ", err)
+		return like, err
+	}
+
+	return like, nil
+}
+
 func SendLikeQuery(like models.Like) error {
 
 	log.Printf("%s %s %s", like.LikerID, like.LikedID, like.ActivityID)
@@ -192,7 +210,42 @@ func SendLikeQuery(like models.Like) error {
 	query := `INSERT INTO likes (liker_id, liked_id, activity_id) VALUES ($1, $2, $3) RETURNING id`
 	err := db.QueryRow(query, like.LikerID, like.LikedID, like.ActivityID).Scan(&like.ID)
 	if err != nil {
-		log.Println("Database insert error:", err)
+		log.Println("Database insert error: ", err)
+		return err
+	}
+
+	return nil
+}
+
+func DeleteLikeQuery(id string) (bool, error) { // Consider combining this function with delete activity
+	query := `DELETE FROM likes WHERE id = $1`
+	result, err := db.Exec(query, id)
+	if err != nil {
+		log.Println("Database delete error:", err)
+		return false, err
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		log.Println("Failed to get affected rows:", err)
+		return false, err
+	}
+
+	if rowsAffected == 0 {
+		return false, nil
+	}
+
+	return true, nil
+}
+
+func CreateMatchQuery(match *models.Match) error {
+
+	log.Printf("%s %s %s", match.LikerID, match.LikedID, match.ActivityID)
+
+	query := `INSERT INTO matches (liker_id, liked_id, activity_id) VALUES ($1, $2, $3) RETURNING id`
+	err := db.QueryRow(query, match.LikerID, match.LikedID, match.ActivityID).Scan(&match.ID)
+	if err != nil {
+		log.Println("Database insert error: ", err)
 		return err
 	}
 

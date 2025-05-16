@@ -43,7 +43,17 @@ var tables = []models.Table{
 	    liked_id UUID REFERENCES users(id) ON DELETE CASCADE,
 		activity_id UUID REFERENCES activities(id),
 	    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-	);`,
+	);`, // TODO: Consider adding status to likes table for filtering
+	},
+	{
+		Name: "matches",
+		Query: `CREATE TABLE IF NOT EXISTS matches (
+	    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+	    liker_id UUID REFERENCES users(id) ON DELETE CASCADE,
+	    liked_id UUID REFERENCES users(id) ON DELETE CASCADE,
+		activity_id UUID REFERENCES activities(id),
+	    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+	);`, // TODO: Consider adding status to likes table for filtering
 	},
 }
 

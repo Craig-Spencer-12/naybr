@@ -15,6 +15,8 @@ func RunRouter() {
 
 	engine.POST("/likes", SendLike)
 	engine.GET("/likes/:id", GetLikeList)
+	engine.DELETE("/likes/:id", RejectLike)
+	engine.POST("/likes/:id/accept", AcceptLike)
 
 	engine.POST("/image", UploadImage)
 	engine.GET("/image/:userId/:filename", GetImage)
