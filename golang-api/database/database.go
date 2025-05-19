@@ -158,8 +158,8 @@ func DeleteActivityQuery(id string) (bool, error) {
 	return true, nil
 }
 
-func GetViewableLikeListQuery(id string) (models.ViewableLikeList, error) {
-	var result models.ViewableLikeList
+func GetViewableLikeListQuery(id string) (models.ViewableConnectionList, error) {
+	var result models.ViewableConnectionList
 
 	query := `SELECT users.id, users.first_name
 		FROM likes
@@ -173,11 +173,41 @@ func GetViewableLikeListQuery(id string) (models.ViewableLikeList, error) {
 	defer rows.Close()
 
 	for rows.Next() {
-		var like models.ViewableLike
+		var like models.ViewableConnection
 		if err := rows.Scan(&like.UserID, &like.FirstName); err != nil {
 			return result, err
 		}
-		result.Likes = append(result.Likes, like)
+		result.Connections = append(result.Connections, like)
+	}
+
+	if err := rows.Err(); err != nil {
+		return result, err
+	}
+
+	return result, nil
+}
+
+// TODO: Consider abstracting this and get like list
+func GetViewableMatchListQuery(id string) (models.ViewableConnectionList, error) {
+	var result models.ViewableConnectionList
+
+	query := `SELECT users.id, users.first_name
+		FROM matches
+		JOIN users ON matches.liker_id = users.id
+		WHERE matches.liked_id = $1;
+	`
+	rows, err := db.Query(query, id)
+	if err != nil {
+		return result, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var connection models.ViewableConnection
+		if err := rows.Scan(&connection.UserID, &connection.FirstName); err != nil {
+			return result, err
+		}
+		result.Connections = append(result.Connections, connection)
 	}
 
 	if err := rows.Err(); err != nil {

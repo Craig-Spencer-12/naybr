@@ -34,13 +34,13 @@ type Match struct {
 	ActivityID string `json:"activityId"`
 }
 
-type ViewableLike struct {
+type ViewableConnection struct {
 	UserID    string `json:"userId"`
 	FirstName string `json:"firstName"`
 }
 
-type ViewableLikeList struct {
-	Likes []ViewableLike `json:"list"`
+type ViewableConnectionList struct {
+	Connections []ViewableConnection `json:"list"`
 }
 
 type ViewableProfile struct {
