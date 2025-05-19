@@ -113,8 +113,20 @@ func SendLike(c *gin.Context) {
 }
 
 func GetLikeList(c *gin.Context) {
-	id := c.Param("id")
-	list, err := database.GetViewableLikeListQuery(id)
+	userId := c.Param("userId")
+	list, err := database.GetViewableLikeListQuery(userId)
+
+	if err != nil {
+		c.IndentedJSON(http.StatusNotFound, gin.H{"message": err.Error()})
+		return
+	}
+
+	c.IndentedJSON(http.StatusOK, list)
+}
+
+func GetMatchList(c *gin.Context) {
+	userId := c.Param("userId")
+	list, err := database.GetViewableMatchListQuery(userId)
 
 	if err != nil {
 		c.IndentedJSON(http.StatusNotFound, gin.H{"message": err.Error()})
