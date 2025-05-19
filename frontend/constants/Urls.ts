@@ -6,6 +6,7 @@ export const Urls = {
   randomUser: base + 'user/random/',
   activities: base + 'activities',
   likes: base + 'likes',
+  matches: base + 'matches',
 
   profilePhoto: 'profile-photo.jpg'
 }

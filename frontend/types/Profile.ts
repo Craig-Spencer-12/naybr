@@ -22,17 +22,19 @@ export type Activity = {
     title: string
 }
 
-export type Like = {
+export type connectionType =  'like' | 'match'
+
+export type Connection = {
     likerId: string
     likedId: string
     activityId: string
 }
 
-export type ViewableLike = {
+export type ViewableConnection = {
     userId: string
     name: string
 }
 
-export type LikeList = {
-    likes: ViewableLike[]
+export type ConnectionList = {
+    connections: ViewableConnection[]
 }

@@ -1,5 +1,5 @@
 import { Tabs } from 'expo-router'
-import React, { useState } from 'react'
+import React from 'react'
 import { Platform } from 'react-native'
 
 import { HapticTab } from '@/components/HapticTab'
@@ -20,7 +20,6 @@ export default function TabLayout() {
           tabBarBackground: TabBarBackground,
           tabBarStyle: Platform.select({
             ios: {
-              // Use a transparent background on iOS to show the blur effect
               position: 'absolute',
               paddingTop: 10,
               height: 80,
@@ -44,9 +43,9 @@ export default function TabLayout() {
           }}
         />
         <Tabs.Screen
-          name="messages"
+          name="matches"
           options={{
-            title: 'Messages',
+            title: 'Matches',
             tabBarIcon: ({ color }) => <IconSymbol size={37} name="bubble.left.and.bubble.right.fill" color={color} />,
           }}
         />
@@ -57,13 +56,6 @@ export default function TabLayout() {
             tabBarIcon: ({ color }) => <IconSymbol size={37} name="person.fill" color={color} />,
           }}
         />
-        {/* <Tabs.Screen
-          name="signup"
-          options={{
-            title: 'Add User',
-            tabBarIcon: ({ color }) => <IconSymbol size={37} name="hammer.fill" color={color} />,
-          }}
-        /> */}
       </Tabs>
   )
 }

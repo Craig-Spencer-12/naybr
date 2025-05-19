@@ -1,7 +1,7 @@
-import { View, StyleSheet, Image, Button, TouchableOpacity, Alert } from 'react-native';
-import React, { useState } from 'react';
+import { View, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import React from 'react';
 import { Urls } from '@/constants/Urls';
-import { Activity, Like, Profile } from '@/types/Profile'
+import { Activity, Profile } from '@/types/Profile'
 import ProfileInfoBar from '@/components/ProfileInfoBar'
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';

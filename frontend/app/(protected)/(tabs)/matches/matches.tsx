@@ -5,25 +5,26 @@ import { useCallback, useEffect, useState } from 'react'
 import { fetchConnections } from '@/api/fetchClient'
 import { useSession } from '@/utils/authContext'
 import { ConnectionList } from '@/types/Profile'
+import { StackNavigationProp } from '@react-navigation/stack'
 
-export default function LikesScreen() {
+export default function MatchesScreen() {
 
   const { session, setConnectionInViewID } = useSession()
-  const [likes, setLikes] = useState<ConnectionList>()
+  const [matches, setMatches] = useState<ConnectionList>()
 
   const navigation = useNavigation()
   const handleNavigate = useCallback((id: string) => {
     setConnectionInViewID(id)
-    navigation.navigate("ViewLike" as never)
+    navigation.navigate("ViewMatch" as never)
   }, [navigation])
 
   useEffect(() => {
-    fetchConnections(session.id, 'like').then(setLikes)
+    fetchConnections(session.id, 'match').then(setMatches)
   }, [session.id])
 
   return (
     <FlatList
-      data={likes?.connections}
+      data={matches?.connections}
       keyExtractor={(item) => item.userId}
       contentContainerStyle={styles.container}
       renderItem={({ item }) => (
