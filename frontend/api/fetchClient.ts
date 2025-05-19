@@ -1,6 +1,6 @@
 import { Urls } from "@/constants/Urls"
-import { EmptyActivity, EmptyLikeList, EmptySession } from "@/constants/Empty"
-import { Activity, Like, LikeList, Profile, UpdatableProfileElement } from "@/types/Profile"
+import { EmptyActivity, EmptyConnectionList, EmptySession } from "@/constants/Empty"
+import { Activity, Connection, ConnectionList, connectionType, Profile, UpdatableProfileElement } from "@/types/Profile"
 
 export async function fetchGeneric(url: string): Promise<any> {
     try {
@@ -12,13 +12,15 @@ export async function fetchGeneric(url: string): Promise<any> {
     }
 }
 
-export async function fetchLikes(id: string): Promise<LikeList> {
+export async function fetchConnections(id: string, likeOrMatch: connectionType): Promise<ConnectionList> {
+    const url = (likeOrMatch == 'like') ? Urls.likes : Urls.matches
+    
     try {
-        const res = await fetch(`${Urls.likes}/${id}`)
+        const res = await fetch(`${url}/${id}`)
         const data = await res.json()
 
-        const parsedList: LikeList = {
-            likes: data.list.map((item: any) => ({
+        const parsedList: ConnectionList = {
+            connections: data.list.map((item: any) => ({
                 userId: item.userId,
                 name: item.firstName,
             })),
@@ -28,7 +30,7 @@ export async function fetchLikes(id: string): Promise<LikeList> {
 
     } catch (err) {
         console.log(`Error: ${err}`)
-        return EmptyLikeList
+        return EmptyConnectionList
     }
 }
 
@@ -125,7 +127,7 @@ export const fetchPostActivity = async (id: string, title: string): Promise<Acti
 }
 
 export const fetchPostLike = async (likerId: string, activity: Activity): Promise<boolean> => {
-    const like: Like = {
+    const like: Connection = {
         likerId: likerId,
         likedId: activity.userID,
         activityId: activity.id
