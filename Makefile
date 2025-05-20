@@ -1,3 +1,6 @@
+supabase:
+	docker compose -f docker-compose.supabase.yml -f docker-compose.s3.yml -p supabase up -d
+
 kube:
 	minikube delete
 	minikube start
@@ -16,3 +19,5 @@ kube:
 
 kube-test:
 	curl http://$$(minikube ip):30080/books
+
+# psql 'postgres://postgres.your-tenant-id:your-super-secret-and-long-postgres-password@localhost:5432/postgres' 
