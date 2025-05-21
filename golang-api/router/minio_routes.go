@@ -1,7 +1,6 @@
 package router
 
 import (
-	"example/golang-api/constants"
 	"example/golang-api/database"
 	"fmt"
 	"io"
@@ -35,7 +34,7 @@ func UploadImage(c *gin.Context) {
 		return
 	}
 
-	err = database.UploadImageQuery(constants.MinioBucket, fileName, tmpFile.Name(), "image/jpeg")
+	err = database.UploadImageQuery(fileName, tmpFile.Name(), "image/jpeg")
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to upload file to MinIO"})
 		return
@@ -50,7 +49,7 @@ func GetImage(c *gin.Context) {
 	fileName := c.Param("filename")
 	path := fmt.Sprintf("%s/%s", userId, fileName)
 
-	imageObject, err := database.GetImageQuery(constants.MinioBucket, path)
+	imageObject, err := database.GetImageQuery(path)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get the file from MinIO"})
 	}

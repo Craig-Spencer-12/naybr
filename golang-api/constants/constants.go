@@ -1,5 +1,5 @@
 package constants
 
 const (
-	MinioBucket = "user-images-bucket"
+	MinioBucket = "stub"
 )

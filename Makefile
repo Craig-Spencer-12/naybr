@@ -1,5 +1,5 @@
 supabase:
-	docker compose -f docker-compose.supabase.yml -f docker-compose.s3.yml -p supabase up -d
+	docker compose -f docker-compose.supabase.yml -f docker-compose.s3.yml -f docker-compose.api.yml -p supabase up --build -d
 
 kube:
 	minikube delete
