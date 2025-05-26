@@ -41,6 +41,9 @@ publish:
 # psql -U user -d mydb
 # \pset pager off
 
+# pg_dump --schema-only --no-owner --no-privileges -U user -d mydb > schema.sql
+# pg_dump --data-only --inserts -U user -d mydb > data.sql
+
 # \dt
 # SELECT * FROM books;
 
@@ -54,3 +57,12 @@ publish:
 
 
 # curl -X POST -F "image=@/home/craig/Desktop/PROJECT/golang-api/assets/zachPhotography.png" http://localhost:8080/image
+
+
+# docker run --rm -it \
+#   -v project_minio_data:/project \
+#   -v ./volumes/storage:/vol \
+#   -v supabase_storage_supabase:/storage \
+#   alpine sh
+
+#  mv ./project/user-images-bucket/* ./vol/stub/ 
