@@ -1,4 +1,6 @@
-{
+import 'expo-env'
+
+export default {
   "expo": {
     "name": "frontend",
     "slug": "frontend",
@@ -36,6 +38,10 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      supabaseUrl: process.env.SUPABASE_PUBLIC_URL,
+      supabaseKey: process.env.SUPABASE_ANON_KEY,
     }
   }
 }
