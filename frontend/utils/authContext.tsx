@@ -22,15 +22,7 @@ export const useSession = (): AuthState => {
         throw new Error('useSession must be used within a Provider');
     }
     return context
-}
-
-export function AuthProvider({ children }: PropsWithChildren) {
-    const [session, setSession] = useState(EmptySession)
-    const [connectionInViewID, setConnectionInViewID] = useState("")
-    const router = useRouter()
-
-
-    const logIn = async (id: string) => {
+}ring) => {
         let user = await fetchProfile(id)
         setSession({
             id: id,
