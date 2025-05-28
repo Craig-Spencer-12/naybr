@@ -3,6 +3,7 @@ import { createContext, PropsWithChildren, useContext, useState } from "react"
 import { useRouter } from "expo-router"
 import { EmptySession } from "@/constants/Empty"
 import { fetchProfile } from "@/api/fetchClient"
+import { authLogin } from "@/api/auth"
 
 
 type AuthState = {
@@ -31,6 +32,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
 
 
     const logIn = async (id: string) => {
+        authLogin()
         let user = await fetchProfile(id)
         setSession({
             id: id,
